@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/MenuCardapio.vue'
+import MenuCardapio from '../components/MenuCardapio.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <MenuCardapio />
   </main>
 </template>
