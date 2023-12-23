@@ -34,7 +34,7 @@ nav {
   top: 0;
   left: 0;
   height: 100%;
-  padding: 17px;
+  padding: 16px;
   align-items: center;
   /* justify-content: space-between; */
   flex-direction: column;
@@ -99,8 +99,8 @@ a.router-link-active span {
 .indicador::before {
   content: '';
   position: absolute;
-  top: -27px;
-  right: -6px;
+  top: -28px;
+  right: -5px;
   width: 20px;
   height: 20px;
   border-bottom-right-radius: 10px;
@@ -111,7 +111,7 @@ a.router-link-active span {
 .indicador::after {
   content: '';
   position: absolute;
-  right: -6.5px;
+  right: -5px;
   bottom: -28px;
   width: 20px;
   height: 20px;
