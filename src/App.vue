@@ -73,6 +73,8 @@ a span {
 .indicador-list {
   width: 75px;
   height: 75px;
+  position: relative;
+  z-index: 300;
   background: #EA7C69;
   box-shadow: 0 0 20px 0px #EA7C69;
   border-radius: 10px;
@@ -97,8 +99,8 @@ a.router-link-active span {
 .indicador::before {
   content: '';
   position: absolute;
-  top: -27.2px;
-  right: -6.5px;
+  top: -28.2px;
+  right: -7.4px;
   width: 20px;
   height: 20px;
   border-bottom-right-radius: 10px;
@@ -117,7 +119,6 @@ a.router-link-active span {
   background: #1F1D2B;
   box-shadow: 0 -10px 0 0 white;
 }
-
 
 .router-link a.router-link-active:nth-child(2).router-link-active~.indicador {
   transform: translateY(calc(93px * 1));
