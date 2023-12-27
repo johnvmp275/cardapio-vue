@@ -1,15 +1,16 @@
+<script setup>
+import Dashboard from '../components/Dashboard.vue'
+</script>
 <template>
   <main class="pedidos">
-    <h1>Pedidos</h1>
+    <h2>Pedidos:</h2>
+    <Dashboard />
   </main>
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100%;
-    display: flex;
-    align-items: center;
-  }
+h2 {
+  text-align: center;
+  margin-bottom: 40px;
 }
 </style>
