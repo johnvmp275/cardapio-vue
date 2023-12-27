@@ -1,7 +1,10 @@
-<script setup></script>
+<script setup>
+import FormMesa from './LIstaPedidos.vue'
+</script>
 
 <template>
   <div>
-    <h1>Teste de Menu</h1>
+    <h1>Cardápio</h1>
+    <FormMesa />
   </div>
 </template>
