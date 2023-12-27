@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div id="tabela-pedido">
+  <table id="tabela-pedido">
     <div>
       <div class="tabela-topo">
         <div class="order-id">#:</div>
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </table>
 </template>
 
 <script></script>
