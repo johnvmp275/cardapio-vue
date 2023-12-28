@@ -117,7 +117,7 @@ export default {
       this.observacoes = ''
       this.comida = 'null'
       this.acompanhamento = 'null'
-      // this.opcionais = ''
+      this.opcionais = ''
     }
   },
   mounted() {
