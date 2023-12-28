@@ -4,9 +4,15 @@ import MenuCardapio from '../components/MenuCardapio.vue'
 
 <template>
   <main>
-    <h1>Cardápio</h1>
+    <h1>Pedidos dos Clientes:</h1>
     <MenuCardapio />
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+</style>

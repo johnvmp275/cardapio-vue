@@ -79,55 +79,39 @@
   ],
   "pedidos": [
     {
-      "nome": "João Vitor Pereira Marques",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
-      "comida": "3 Queijos",
-      "acompanhamento": "Alcatra",
-      "opcionais": [
-        "Bacon",
-        "Salame",
-        "Cebola roxa"
-      ],
-      "status": "Em produção",
-      "id": 1
-    },
-    {
       "nome": "Tharles Moreto",
       "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
       "comida": "3 Queijos",
-      "acompanhamento": "Alcatra",
+      "acompanhamento": "Maminha",
       "opcionais": [
         "Bacon",
-        "Salame",
-        "Cheddar",
-        "Tomate",
-        "Cebola roxa"
+        "Salame"
+      ],
+      "status": "Solicitado",
+      "id": 1
+    },
+    {
+      "nome": "Matheus",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
+      "comida": "Integral",
+      "acompanhamento": "Maminha",
+      "opcionais": [
+        "Bacon",
+        "Salame"
       ],
       "status": "Solicitado",
       "id": 2
     },
     {
-      "nome": "Matheus",
-      "observacoes": "",
-      "comida": "Italiano Branco",
+      "nome": "João Vitor Pereira Marques",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
+      "comida": "Integral",
       "acompanhamento": "Maminha",
       "opcionais": [
         "Bacon"
       ],
       "status": "Solicitado",
       "id": 3
-    },
-    {
-      "nome": "Maumau",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
-      "comida": "Italiano Branco",
-      "acompanhamento": "Alcatra",
-      "opcionais": [
-        "Bacon",
-        "Salame"
-      ],
-      "status": "Solicitado",
-      "id": 4
     }
   ]
 }

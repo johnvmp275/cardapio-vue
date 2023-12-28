@@ -1,7 +1,10 @@
-<script setup></script>
+<script setup>
+import MassageNot from './Notificacao.vue'
+</script>
 
 <template>
   <div class="tabela-scroll">
+    <MassageNot :msg="msg" v-show="msg" />
     <div id="tabela-pedido">
       <div>
         <div class="tabela-topo">
@@ -29,8 +32,8 @@
           </div>
           <div class="observacao-cliente">teste</div>
           <div class="status-pedido">
-            <select name="status" id="status" @change="updateStatus($event, pedido.id)"> 
-              <option value="null">Selecione</option>
+            <select name="status" id="status" @change="updateStatus($event, pedido.id)">
+              <option value="Aguardando...">Aguardando..</option>
               <option v-for=" s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
                 {{ s.tipo }}
               </option>
@@ -50,7 +53,8 @@ export default {
     return {
       pedidos: null,
       pedidosId: null,
-      status: []
+      status: [],
+      msg: null
     }
   },
   methods: {
@@ -75,12 +79,20 @@ export default {
       });
       const res = await req.json();
 
+      //Mensagem do sistema ao enviar pedido
+      this.msg = `O Pedido N° ${id} foi removido!`
+
+      //Limpar mensagem após enviar
+      setTimeout(() => {
+        this.msg = ''
+      }, 3000)
+
       this.getPedidos()
     },
     async updateStatus(event, id) {
       const option = event.target.value;
 
-      const dataJson = JSON.stringify({ status: option});
+      const dataJson = JSON.stringify({ status: option });
 
       const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
         method: "PATCH",
@@ -90,7 +102,14 @@ export default {
 
       const res = await req.json();
 
-      console.log(res)
+      //Mensagem do sistema ao enviar pedido
+      this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`
+
+      //Limpar mensagem após enviar
+      setTimeout(() => {
+        this.msg = ''
+      }, 3000)
+
     },
   },
   mounted() {
@@ -107,7 +126,7 @@ export default {
 }
 
 .tabela-scroll::-webkit-scrollbar {
-  height: 5px;
+  height: 10px;
 }
 
 .tabela-scroll::-webkit-scrollbar-thumb {
@@ -196,5 +215,9 @@ select {
 .tabela-topo .status-pedido,
 .tabela-row .status-pedido {
   max-width: 19%;
+}
+
+.notificacao-container {
+  background: red;
 }
 </style>

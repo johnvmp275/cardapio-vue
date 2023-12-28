@@ -7,10 +7,19 @@ import { RouterLink } from 'vue-router'
     <section class="navigation-section">
       <div class="navigation-link">
         <RouterLink to="/">
-          <span class="material-symbols-outlined"> store </span>
+          <span class="material-symbols-outlined">
+            store
+          </span>
         </RouterLink>
         <RouterLink to="/pedidos">
-          <span class="material-symbols-outlined"> shopping_cart </span>
+          <span class="material-symbols-outlined">
+            shopping_cart
+          </span>
+        </RouterLink>
+        <RouterLink to="/config" class="animation-rotate">
+          <span class="material-symbols-outlined">
+            settings
+          </span>
         </RouterLink>
         <div class="indicador">
           <div class="indicador-list"></div>
@@ -123,9 +132,18 @@ a.router-link-active {
   animation: animationLink 0.9s;
 }
 
-.navigation-link a.router-link-active:nth-child(2).router-link-active ~ .indicador {
+.animation-rotate.router-link-active {
+  animation: rotation 5s linear infinite;
+}
+
+.navigation-link a.router-link-active:nth-child(2).router-link-active~.indicador {
   transform: translateY(calc(93px * 1));
 }
+
+.navigation-link a.router-link-active:nth-child(3).router-link-active~.indicador {
+  transform: translateY(calc(93px * 2));
+}
+
 
 @keyframes animationLink {
   10% {
@@ -142,6 +160,16 @@ a.router-link-active {
 
   75% {
     transform: rotate(35deg);
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 

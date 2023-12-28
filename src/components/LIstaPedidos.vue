@@ -5,24 +5,17 @@ import MassageNot from './Notificacao.vue'
 <template>
   <div>
     <section class="pedidosForm">
-      <form id="pedido-formulario" method="" @submit="criarPedido">
+      <form id="pedido-formulario" method="POST" @submit="criarPedido">
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input
-            type="text"
-            name="nome"
-            id="nome"
-            v-model="nome"
-            placeholder="Nome do Cliente"
-            required
-          />
+          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
           <label for="comida">Cardápio:</label>
-          <select name="comida" id="comida" v-model="comida">
-            <option value="null" selected>Selecione o Pedido</option>
+          <select name="comida" id="comida" v-model="comida" required>
+            <option value="null" selected style="display: none">Selecione o Pedido</option>
             <option v-for="comida in comidas" :key="comida.id" :value="comida.tipo">
               {{ comida.tipo }}
             </option>
@@ -31,12 +24,8 @@ import MassageNot from './Notificacao.vue'
         <div class="opcoes-container">
           <label for="acompanhamento">Acompanhamentos:</label>
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
-            <option value="null" selected>Selecione o Pedido</option>
-            <option
-              v-for="acompanhamento in acompanhamentos"
-              :key="acompanhamento.id"
-              :value="acompanhamento.tipo"
-            >
+            <option value="null" selected style="display: none;">Selecione o Pedido</option>
+            <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
               {{ acompanhamento.tipo }}
             </option>
           </select>
@@ -54,13 +43,8 @@ import MassageNot from './Notificacao.vue'
         <!-- Cadastrar as observações -->
         <div class="cliente-container">
           <label for="observacoes">Observações sobre o Cliente:</label>
-          <input
-            type="text"
-            name="observacoes"
-            id="observacoes"
-            v-model="observacoes"
-            placeholder="Registre as suas observações"
-          />
+          <input type="text" name="observacoes" id="observacoes" v-model="observacoes"
+            placeholder="Registre as suas observações" />
         </div>
         <!-- input para postar o peidido para aba de pedidos -->
         <div class="button-submit">
@@ -133,7 +117,7 @@ export default {
       this.observacoes = ''
       this.comida = 'null'
       this.acompanhamento = 'null'
-      this.opcionais = ''
+      // this.opcionais = ''
     }
   },
   mounted() {
@@ -143,6 +127,11 @@ export default {
 </script>
 
 <style scoped>
+.pedidosForm {
+  display: flex;
+  justify-content: center;
+}
+
 form {
   background: #1f1d2b;
   display: flex;

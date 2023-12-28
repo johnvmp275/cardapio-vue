@@ -9,9 +9,10 @@ import Dashboard from '../components/Dashboard.vue'
 </template>
 
 <style>
-h2 {
+h1 {
   text-align: center;
-  margin-bottom: 40px;
+  font-weight: bold;
+  margin-bottom: 2rem;
 }
 
 main {
