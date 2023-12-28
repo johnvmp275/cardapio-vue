@@ -35,6 +35,10 @@ main {
   padding: 0 16px;
 }
 
+input {
+  outline: none;
+}
+
 @media (max-width: 720px) {
   #app {
     display: block;

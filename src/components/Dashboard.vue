@@ -134,7 +134,7 @@ export default {
 }
 
 #tabela-pedido {
-  min-width: 1298px;
+  min-width: 1330px;
 }
 
 .tabela-topo,

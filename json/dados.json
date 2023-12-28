@@ -3,63 +3,55 @@
     "comidas": [
       {
         "id": 1,
-        "tipo": "Italiano Branco"
+        "tipo": "Macarronada"
       },
       {
         "id": 2,
-        "tipo": "3 Queijos"
+        "tipo": "Pizza 4 queijo"
       },
       {
         "id": 3,
-        "tipo": "Parmesão e Orégano"
+        "tipo": "King-Crab"
       },
       {
         "id": 4,
-        "tipo": "Integral"
+        "tipo": "Strogonoff"
+      },
+      {
+        "id": 5,
+        "tipo": "Frango Assado"
       }
     ],
     "acompanhamentos": [
       {
         "id": 1,
-        "tipo": "Maminha"
+        "tipo": "Porção batata frita"
       },
       {
         "id": 2,
-        "tipo": "Alcatra"
-      },
-      {
-        "id": 3,
-        "tipo": "Picanha"
-      },
-      {
-        "id": 4,
-        "tipo": "Veggie burger"
+        "tipo": "Molho de Churrasco"
       }
     ],
     "opcionais": [
       {
         "id": 1,
-        "tipo": "Bacon"
+        "tipo": "Coca-Cola 2L"
       },
       {
         "id": 2,
-        "tipo": "Cheddar"
+        "tipo": "Chopp"
       },
       {
         "id": 3,
-        "tipo": "Salame"
+        "tipo": "Suco de Laranja 800ml"
       },
       {
         "id": 4,
-        "tipo": "Tomate"
+        "tipo": "Vinho Tinto 2L"
       },
       {
-        "id": 4,
-        "tipo": "Cebola roxa"
-      },
-      {
-        "id": 4,
-        "tipo": "Pepino"
+        "id": 5,
+        "tipo": "Vinho Rosé 2L"
       }
     ]
   },
@@ -79,36 +71,36 @@
   ],
   "pedidos": [
     {
-      "nome": "Tharles Moreto",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
-      "comida": "3 Queijos",
-      "acompanhamento": "Maminha",
+      "nome": "João Vitor ",
+      "observacoes": null,
+      "comida": "King-Crab",
+      "acompanhamento": null,
       "opcionais": [
-        "Bacon",
-        "Salame"
+        "Coca-Cola 2L",
+        "Chopp"
       ],
-      "status": "Solicitado",
+      "status": "Em produção",
       "id": 1
     },
     {
-      "nome": "Matheus",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
-      "comida": "Integral",
-      "acompanhamento": "Maminha",
+      "nome": "Tharles Moreto",
+      "observacoes": null,
+      "comida": "Macarronada",
+      "acompanhamento": null,
       "opcionais": [
-        "Bacon",
-        "Salame"
+        "Coca-Cola 2L"
       ],
       "status": "Solicitado",
       "id": 2
     },
     {
-      "nome": "João Vitor Pereira Marques",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
-      "comida": "Integral",
-      "acompanhamento": "Maminha",
+      "nome": "Lyan",
+      "observacoes": null,
+      "comida": "King-Crab",
+      "acompanhamento": "Molho de Churrasco",
       "opcionais": [
-        "Bacon"
+        "Coca-Cola 2L",
+        "Vinho Rosé 2L"
       ],
       "status": "Solicitado",
       "id": 3
