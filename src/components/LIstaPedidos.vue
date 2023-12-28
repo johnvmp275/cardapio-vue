@@ -101,8 +101,6 @@ export default {
     async criarPedido(e) {
       e.preventDefault()
 
-      console.log('pedido foi enviado')
-
       const data = {
         nome: this.nome,
         observacoes: this.observacoes,
@@ -121,8 +119,6 @@ export default {
       })
 
       const res = await req.json()
-
-      console.log(res)
 
       //Mensagem do sistema ao enviar pedido
       this.msg = `O Pedido N° ${res.id} foi enviado com sucesso!`

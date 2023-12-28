@@ -79,32 +79,37 @@
   ],
   "pedidos": [
     {
-      "nome": "Header: menu principal",
-      "observacoes": "teste",
-      "comida": "Italiano Branco",
-      "acompanhamento": "Alcatra",
-      "opcionais": [
-        "Bacon",
-        "Salame"
-      ],
-      "status": "Solicitado",
-      "id": 1
-    },
-    {
-      "nome": "teste",
-      "observacoes": "qwdqwdqwdqwd",
+      "nome": "João Vitor Pereira Marques",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
       "comida": "3 Queijos",
       "acompanhamento": "Alcatra",
       "opcionais": [
-        "Bacon"
+        "Bacon",
+        "Salame",
+        "Cebola roxa"
+      ],
+      "status": "Em produção",
+      "id": 1
+    },
+    {
+      "nome": "Tharles Moreto",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
+      "comida": "3 Queijos",
+      "acompanhamento": "Alcatra",
+      "opcionais": [
+        "Bacon",
+        "Salame",
+        "Cheddar",
+        "Tomate",
+        "Cebola roxa"
       ],
       "status": "Solicitado",
       "id": 2
     },
     {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": "qwdqwdqwdqwd",
-      "comida": "3 Queijos",
+      "nome": "Matheus",
+      "observacoes": "",
+      "comida": "Italiano Branco",
       "acompanhamento": "Maminha",
       "opcionais": [
         "Bacon"
@@ -113,268 +118,16 @@
       "id": 3
     },
     {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": "qwdqwdqwdqwd",
-      "comida": "Parmesão e Orégano",
-      "acompanhamento": "",
+      "nome": "Maumau",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
+      "comida": "Italiano Branco",
+      "acompanhamento": "Alcatra",
       "opcionais": [
         "Bacon",
-        "Salame",
-        "Cebola roxa"
+        "Salame"
       ],
       "status": "Solicitado",
       "id": 4
-    },
-    {
-      "nome": null,
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 5
-    },
-    {
-      "nome": "Menu Principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 6
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": "qwdqwdqwdqwd",
-      "comida": "3 Queijos",
-      "acompanhamento": "Maminha",
-      "opcionais": [
-        "Bacon",
-        "Salame",
-        "Cebola roxa"
-      ],
-      "status": "Solicitado",
-      "id": 7
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": "qwdqwdqwdqwd",
-      "comida": "3 Queijos",
-      "acompanhamento": "Alcatra",
-      "opcionais": [
-        "Bacon",
-        "Salame",
-        "Cebola roxa"
-      ],
-      "status": "Solicitado",
-      "id": 8
-    },
-    {
-      "nome": "teste",
-      "observacoes": "qwdqwdqwdqwd",
-      "comida": "3 Queijos",
-      "acompanhamento": "Alcatra",
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 9
-    },
-    {
-      "nome": "teste",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 10
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 11
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 12
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 13
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 14
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 15
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 16
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 17
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 18
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 19
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 20
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 21
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 22
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": "",
-      "comida": "null",
-      "acompanhamento": "null",
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 23
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": "",
-      "comida": "null",
-      "acompanhamento": "null",
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 24
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 25
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 26
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 27
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 28
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": "",
-      "comida": "null",
-      "acompanhamento": "null",
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 29
-    },
-    {
-      "nome": "Header: menu principal",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 30
-    },
-    {
-      "nome": "[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t[ TESTE-FRONTEND ] - Teste para [ LISTA ABERTA ]\t",
-      "observacoes": null,
-      "comida": null,
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Solicitado",
-      "id": 31
     }
   ]
 }

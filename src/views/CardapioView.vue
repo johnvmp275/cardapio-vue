@@ -4,6 +4,9 @@ import MenuCardapio from '../components/MenuCardapio.vue'
 
 <template>
   <main>
+    <h1>Cardápio</h1>
     <MenuCardapio />
   </main>
 </template>
+
+<style scoped></style>
