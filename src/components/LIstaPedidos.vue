@@ -52,7 +52,7 @@ import MassageNot from './Notificacao.vue'
         </div>
       </form>
     </section>
-    <MassageNot :msg="msg" v-show="msg" />
+    <MassageNot :msg="msg" :icon="icon" v-show="msg" />
   </div>
 </template>
 
@@ -65,59 +65,70 @@ export default {
       acompanhamentos: null,
       opcionaisData: null,
       nome: null,
-      observacoes: null,
+      observacoes: '',
       comida: null,
       acompanhamento: null,
       opcionais: [],
-      msg: null
+      msg: null,
+      icon: null
     }
   },
   methods: {
     async getDados() {
-      const req = await fetch('http://localhost:3000/ingredientes')
-      const data = await req.json()
+      try {
+        const req = await fetch('http://localhost:3000/ingredientes')
+        const data = await req.json()
 
-      this.comidas = data.comidas
-      this.acompanhamentos = data.acompanhamentos
-      this.opcionaisData = data.opcionais
+        this.comidas = data.comidas
+        this.acompanhamentos = data.acompanhamentos
+        this.opcionaisData = data.opcionais
+      }
+      catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
 
     async criarPedido(e) {
-      e.preventDefault()
+      try {
+        e.preventDefault()
 
-      const data = {
-        nome: this.nome,
-        observacoes: this.observacoes,
-        comida: this.comida,
-        acompanhamento: this.acompanhamento,
-        opcionais: Array.from(this.opcionais),
-        status: 'Solicitado'
+        const data = {
+          nome: this.nome,
+          observacoes: this.observacoes,
+          comida: this.comida,
+          acompanhamento: this.acompanhamento,
+          opcionais: Array.from(this.opcionais),
+          status: 'Solicitado'
+        }
+
+        const dataJson = JSON.stringify(data)
+
+        const req = await fetch('http://localhost:3000/pedidos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: dataJson
+        })
+
+        const res = await req.json()
+
+        //Mensagem do sistema ao enviar pedido
+        this.msg = `O Pedido N° ${res.id} foi enviado com sucesso!`
+        this.icon = 'check'
+
+        //Limpar mensagem após enviar
+        setTimeout(() => {
+          this.msg = ''
+        }, 3000)
+
+        //Limpar campos ao enviar
+        this.nome = ''
+        this.observacoes = ''
+        this.comida = 'null'
+        this.acompanhamento = 'null'
+        // this.opcionais = ''
+      } catch (error) {
+        console.error("Houve um erro de busca", error);
       }
-
-      const dataJson = JSON.stringify(data)
-
-      const req = await fetch('http://localhost:3000/pedidos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: dataJson
-      })
-
-      const res = await req.json()
-
-      //Mensagem do sistema ao enviar pedido
-      this.msg = `O Pedido N° ${res.id} foi enviado com sucesso!`
-
-      //Limpar mensagem após enviar
-      setTimeout(() => {
-        this.msg = ''
-      }, 3000)
-
-      //Limpar campos ao enviar
-      this.nome = ''
-      this.observacoes = ''
-      this.comida = 'null'
-      this.acompanhamento = 'null'
-      // this.opcionais = ''
     }
   },
   mounted() {
@@ -172,10 +183,21 @@ select {
   cursor: pointer;
 }
 
+.opcoes-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.opcoes-container::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
 .opcoes-container {
   display: flex;
+  overflow: hidden;
+  overflow-y: auto;
   flex-direction: row;
   flex-wrap: wrap;
+  height: 100px;
 }
 
 .opcoes-container input {

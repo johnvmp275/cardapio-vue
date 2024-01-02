@@ -1,16 +1,20 @@
 <template>
   <div class="notificacao-container">
+    <span class="material-symbols-outlined"> {{icon}} </span>
     <p>
-      <span class="material-symbols-outlined"> check </span>
       {{ msg }}
     </p>
+    <!-- <button><span class="material-symbols-outlined">
+        cancel
+      </span></button> -->
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    msg: String
+    msg: String,
+    icon: String
   }
 }
 </script>
@@ -30,19 +34,44 @@ export default {
   right: 10px;
   animation: showMessage 0.5s;
   border-radius: 8px;
+  gap: 20px;
 }
 
 .notificacao-container p {
   display: flex;
+  width: 100%;
+  height: 60px;
+  overflow: hidden;
+  overflow-y: auto;
   align-items: center;
+  /* max-width: 400px; */
   gap: 20px;
+}
+
+p::-webkit-scrollbar {
+  width: 10px;
+}
+
+p::-webkit-scrollbar-thumb {
+  background: #fff;
+}
+
+button {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #fff;
+}
+
+button span {
+  font-size: 28px;
 }
 
 @keyframes showMessage {
   from {
     margin-top: -100px;
   }
-  to {
-  }
+
+  to {}
 }
 </style>

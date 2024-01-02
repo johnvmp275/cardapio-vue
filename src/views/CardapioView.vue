@@ -4,7 +4,6 @@ import MenuCardapio from '../components/MenuCardapio.vue'
 
 <template>
   <main>
-    <h1>Pedidos dos Clientes:</h1>
     <MenuCardapio />
   </main>
 </template>

@@ -3,8 +3,9 @@ import MassageNot from './Notificacao.vue'
 </script>
 
 <template>
+  <h1>Gerencie o Fluxo de Pedidos:</h1>
   <div class="tabela-scroll">
-    <MassageNot :msg="msg" v-show="msg" />
+    <MassageNot :msg="msg" :icon="icon" v-show="msg" @click="Close()" />
     <div id="tabela-pedido">
       <div>
         <div class="tabela-topo">
@@ -18,6 +19,7 @@ import MassageNot from './Notificacao.vue'
         </div>
       </div>
       <div id="tabela-rows">
+        <p class="aviso-sem-estoque" v-if="!pedidos.length">Ops! Ainda Não possui nenhum pedido </p>
         <div class="tabela-row" v-for="pedido in pedidos" :key="pedido.id">
           <div class="id-pedido">{{ pedido.id }}</div>
           <div>{{ pedido.nome }}</div>
@@ -30,7 +32,11 @@ import MassageNot from './Notificacao.vue'
               </li>
             </ul>
           </div>
-          <div class="observacao-cliente">teste</div>
+          <button class="btn-observacao" @click="popUp(pedido.observacoes)">
+            <span class="material-symbols-outlined">
+              visibility
+            </span>
+          </button>
           <div class="status-pedido">
             <select name="status" id="status" @change="updateStatus($event, pedido.id)">
               <option value="Aguardando...">Aguardando..</option>
@@ -51,7 +57,8 @@ export default {
   name: 'Pedidos',
   data() {
     return {
-      pedidos: null,
+      color: null,
+      pedidos: [],
       pedidosId: null,
       status: [],
       msg: null
@@ -59,58 +66,93 @@ export default {
   },
   methods: {
     async getPedidos() {
-      const req = await fetch('http://localhost:3000/pedidos');
-      const data = await req.json();
+      try {
+        const req = await fetch('http://localhost:3000/pedidos');
+        const data = await req.json();
 
-      this.pedidos = data;
-
-      // resgate de status do pedidos
-      this.getStatus();
+        this.pedidos = data;
+        // resgate de status do pedidos
+        this.getStatus();
+      }
+      catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
     async getStatus() {
-      const req = await fetch('http://localhost:3000/status');
-      const data = await req.json();
+      try {
+        const req = await fetch('http://localhost:3000/status');
+        const data = await req.json();
 
-      this.status = data;
+        this.status = data;
+      }
+      catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
     async deletePedido(id) {
-      const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
-        method: "DELETE"
-      });
-      const res = await req.json();
+      try {
+        const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
+          method: "DELETE"
+        });
+        const res = await req.json();
 
-      //Mensagem do sistema ao enviar pedido
-      this.msg = `O Pedido N° ${id} foi removido!`
+        //Mensagem do sistema ao enviar pedido
+        this.msg = `O Pedido N° ${id} foi removido!`;
+        this.color = 'red';
+        this.icon = 'warning'
 
-      //Limpar mensagem após enviar
-      setTimeout(() => {
-        this.msg = ''
-      }, 3000)
+        //Limpar mensagem após enviar
+        setTimeout(() => {
+          this.msg = ''
+        }, 3000)
 
-      this.getPedidos()
+        this.getPedidos()
+      }
+      catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
     async updateStatus(event, id) {
-      const option = event.target.value;
+      try {
+        const option = event.target.value;
 
-      const dataJson = JSON.stringify({ status: option });
+        const dataJson = JSON.stringify({ status: option });
 
-      const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
-        method: "PATCH",
-        headers: { 'Content-Type': 'application/json' },
-        body: dataJson
-      });
+        const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
+          method: "PATCH",
+          headers: { 'Content-Type': 'application/json' },
+          body: dataJson
+        });
 
-      const res = await req.json();
+        const res = await req.json();
 
-      //Mensagem do sistema ao enviar pedido
-      this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`
+        //Mensagem do sistema ao enviar pedido
+        this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`;
+        this.color = 'green';
+        this.icon = 'check'
+        // this.color = this.status[this.background];
 
-      //Limpar mensagem após enviar
-      setTimeout(() => {
-        this.msg = ''
-      }, 3000)
+        // console.log(this.color);
 
+        //Limpar mensagem após enviar
+        setTimeout(() => {
+          this.msg = ''
+        }, 3000)
+      } catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
+    popUp(observacoes) {
+      // this.msg = `${observacoes}`
+      // this.color = 'orange';
+      // this.icon = 'visibility'
+      // setTimeout(() => {
+      //   this.msg = ''
+      // }, 3000)
+    },
+    Close() {
+      // this.msg = ''
+    }
   },
   mounted() {
     this.getPedidos()
@@ -122,7 +164,7 @@ export default {
 .tabela-scroll {
   width: 100%;
   padding: 10px 0;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .tabela-scroll::-webkit-scrollbar {
@@ -137,11 +179,17 @@ export default {
   min-width: 1330px;
 }
 
-.tabela-topo,
-#tabela-rows,
-.tabela-row {
+#tabela-rows {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.tabela-topo,
+.tabela-row {
+  display: grid;
+  padding: 12px;
+  grid-template-columns: 50px repeat(4, 1.8fr) 1.2fr 3fr;
+  width: 100%;
   align-items: center;
   gap: 4px;
 }
@@ -152,16 +200,16 @@ export default {
 }
 
 .tabela-topo div {
+  width: 100%;
+  display: flex;
   font-weight: bold;
 }
 
 .tabela-topo div,
 .tabela-row div {
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
-  min-width: 3%;
-  max-width: 16.16%;
+  min-width: 100%;
   overflow: hidden;
   padding: 0 6px;
   gap: 10px;
@@ -173,10 +221,6 @@ export default {
   border-bottom: 3px solid #1f1d2b;
 }
 
-.tabela-topo .order-id,
-.tabela-row .id-pedido {
-  max-width: 3%;
-}
 
 select {
   cursor: pointer;
@@ -207,17 +251,36 @@ select {
   overflow-y: auto;
 }
 
-.tabela-topo .observacao-cliente,
-.tabela-row .observacao-cliente {
-  max-width: 11%;
+.tabela-row ul::-webkit-scrollbar {
+  width: 10px;
 }
 
-.tabela-topo .status-pedido,
-.tabela-row .status-pedido {
-  max-width: 19%;
+.tabela-row ul::-webkit-scrollbar-thumb {
+  background: #1f1d2b;
 }
 
 .notificacao-container {
-  background: red;
+  background: v-bind(color);
+}
+
+.aviso-sem-estoque {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  height: 300px;
+}
+
+.aviso-sem-estoque::after {
+  content: ':(';
+  margin-left: 10px;
+}
+
+.btn-observacao {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 50px;
+  margin: 0 auto;
 }
 </style>

@@ -20,6 +20,14 @@
       {
         "id": 5,
         "tipo": "Frango Assado"
+      },
+      {
+        "id": 6,
+        "tipo": "Costela Assada"
+      },
+      {
+        "id": 7,
+        "tipo": "arroz carreteiro"
       }
     ],
     "acompanhamentos": [
@@ -30,6 +38,14 @@
       {
         "id": 2,
         "tipo": "Molho de Churrasco"
+      },
+      {
+        "id": 3,
+        "tipo": "Molho de Alho"
+      },
+      {
+        "id": 4,
+        "tipo": "Farofa"
       }
     ],
     "opcionais": [
@@ -52,58 +68,46 @@
       {
         "id": 5,
         "tipo": "Vinho Rosé 2L"
+      },
+      {
+        "id": 6,
+        "tipo": "Suco de Manga"
+      },
+      {
+        "id": 7,
+        "tipo": "Chopp de Vinho"
       }
     ]
   },
   "status": [
     {
       "id": 1,
-      "tipo": "Solicitado"
+      "tipo": "Solicitado",
+      "background": "green"
     },
     {
       "id": 2,
-      "tipo": "Em produção"
+      "tipo": "Em produção",
+      "background": "green"
     },
     {
       "id": 3,
-      "tipo": "Finalizado"
+      "tipo": "Finalizado",
+      "background": "green"
     }
   ],
   "pedidos": [
     {
-      "nome": "João Vitor ",
-      "observacoes": null,
+      "nome": "Tharles Moreto",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
       "comida": "King-Crab",
-      "acompanhamento": null,
+      "acompanhamento": "Porção batata frita",
       "opcionais": [
         "Coca-Cola 2L",
-        "Chopp"
+        "Suco de Laranja 800ml"
       ],
       "status": "Em produção",
       "id": 1
-    },
-    {
-      "nome": "Tharles Moreto",
-      "observacoes": null,
-      "comida": "Macarronada",
-      "acompanhamento": null,
-      "opcionais": [
-        "Coca-Cola 2L"
-      ],
-      "status": "Solicitado",
-      "id": 2
-    },
-    {
-      "nome": "Lyan",
-      "observacoes": null,
-      "comida": "King-Crab",
-      "acompanhamento": "Molho de Churrasco",
-      "opcionais": [
-        "Coca-Cola 2L",
-        "Vinho Rosé 2L"
-      ],
-      "status": "Solicitado",
-      "id": 3
     }
   ]
 }

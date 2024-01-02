@@ -1,9 +1,10 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
+import DeleteProduto from './DeleteProduto.vue'
 </script>
 
 <template>
-  <h1>teste</h1>
+  <h1>Menu Personalizado: Sua Cozinha, Suas Regras!</h1>
   <div>
     <div class="tabela-scroll">
       <MassageNot :msg="msg" v-show="msg" />
@@ -30,6 +31,7 @@ import MassageNot from './Notificacao.vue'
       </div>
     </div>
   </div>
+  <DeleteProduto :update="update" :key="updateKey" />
 </template>
 
 <script>
@@ -41,47 +43,59 @@ export default {
       tipo: null,
       dados: {},
       categoria: null,
+      update: true,
+      updateKey: 0,
       msg: null
     }
   },
   methods: {
     async getDados() {
-      const req = await fetch('http://localhost:3000/ingredientes')
-      const data = await req.json()
+      try {
+        const req = await fetch('http://localhost:3000/ingredientes')
+        const data = await req.json()
 
-      this.dados = data
+        this.dados = data
+      } catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     },
     async criarProduto() {
-      const dadosString = JSON.stringify(this.dados)
-      const dataObj = JSON.parse(dadosString)
+      try {
+        const dadosString = JSON.stringify(this.dados)
+        const dataObj = JSON.parse(dadosString)
 
-      const index = dataObj[this.categoria].length + 1
-      dataObj[this.categoria].push({
-        id: index,
-        tipo: this.tipo
-      })
+        const index = dataObj[this.categoria].length + 1
+        dataObj[this.categoria].push({
+          id: index,
+          tipo: this.tipo
+        })
 
-      const dataJson = JSON.stringify(dataObj)
+        const dataJson = JSON.stringify(dataObj)
 
-      const req = await fetch('http://localhost:3000/ingredientes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: dataJson
-      })
+        const req = await fetch('http://localhost:3000/ingredientes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: dataJson
+        })
 
-      const res = await req.json()
+        const res = await req.json()
 
-      //Mensagem do sistema ao enviar pedido
-      this.msg = `O Produto: ${this.tipo} acabou de ser criado!`
+        //Mensagem do sistema ao enviar pedido
+        this.update = !this.update;
+        this.updateKey += 1;
+        this.msg = `O Produto: ${this.tipo} acabou de ser criado!`;
 
-      //Limpar mensagem após enviar
-      setTimeout(() => {
-        this.msg = ''
-      }, 3000)
+        //Limpar mensagem após enviar
+        setTimeout(() => {
+          this.msg = ''
+        }, 3000)
 
-      // //Limpar campos ao enviar
-      this.categoria = 'null'
-      this.tipo = ''
+        // //Limpar campos ao enviar
+        this.categoria = 'null'
+        this.tipo = ''
+      } catch (error) {
+        console.error("Houve um erro de busca", error);
+      }
     }
   },
   created() {
@@ -155,8 +169,7 @@ select {
   font-weight: bold;
 }
 
-.notificacao-container {
-}
+.notificacao-container {}
 
 input {
   width: 100%;

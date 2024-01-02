@@ -3,13 +3,13 @@ import Dashboard from '../components/Dashboard.vue'
 </script>
 <template>
   <main>
-    <h1>Pedidos:</h1>
     <Dashboard />
   </main>
 </template>
 
 <style>
 h1 {
+  margin-top: 2rem;
   text-align: center;
   font-weight: bold;
   margin-bottom: 2rem;
