@@ -22,6 +22,12 @@ npm install
 npm run dev
 ```
 
+### Initialize the fake backend
+
+```sh
+npm run backend
+```
+
 ### Compile and Minify for Production
 
 ```sh
