@@ -67,7 +67,7 @@ export default {
   methods: {
     async getPedidos() {
       try {
-        const req = await fetch('http://localhost:3000/pedidos');
+        const req = await fetch('https://cardapio-vue.vercel.app/pedidos');
         const data = await req.json();
 
         this.pedidos = data;
@@ -80,7 +80,7 @@ export default {
     },
     async getStatus() {
       try {
-        const req = await fetch('http://localhost:3000/status');
+        const req = await fetch('https://cardapio-vue.vercel.app/status');
         const data = await req.json();
 
         this.status = data;
@@ -91,7 +91,7 @@ export default {
     },
     async deletePedido(id) {
       try {
-        const req = await fetch(`https://cardapio-vue.vercel.app/pedidos/{id}`, {
+        const req = await fetch(`https://cardapio-vue.vercel.app/pedidosz{id}`, {
           method: "DELETE"
         });
         const res = await req.json();
