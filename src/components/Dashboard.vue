@@ -91,7 +91,7 @@ export default {
     },
     async deletePedido(id) {
       try {
-        const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
+        const req = await fetch(`https://cardapio-vue.vercel.app/pedidos/{id}`, {
           method: "DELETE"
         });
         const res = await req.json();
@@ -118,7 +118,7 @@ export default {
 
         const dataJson = JSON.stringify({ status: option });
 
-        const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
+        const req = await fetch(`https://cardapio-vue.vercel.app/pedidos/${id}`, {
           method: "PATCH",
           headers: { 'Content-Type': 'application/json' },
           body: dataJson
