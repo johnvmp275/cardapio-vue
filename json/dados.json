@@ -28,6 +28,10 @@
       {
         "id": 7,
         "tipo": "arroz carreteiro"
+      },
+      {
+        "id": 8,
+        "tipo": "qwsqwsqwsqwsq"
       }
     ],
     "acompanhamentos": [
@@ -108,6 +112,18 @@
       ],
       "status": "Solicitado",
       "id": 1
+    },
+    {
+      "nome": "Maumau",
+      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
+      "comida": "Macarronada",
+      "acompanhamento": "Porção batata frita",
+      "opcionais": [
+        "Coca-Cola 2L",
+        "Suco de Laranja 800ml"
+      ],
+      "status": "Em produção",
+      "id": 2
     }
   ]
 }
