@@ -1,13 +1,15 @@
 <template>
-    <section>
-        <div>
-            <h2>404</h2>
-            <p>Página não encontrada</p>
-        </div>
-        <router-link to="/">
-            Voltar para Home
-        </router-link>
-    </section>
+    <main>
+        <section>
+            <div>
+                <h2>404</h2>
+                <p>Página não encontrada</p>
+            </div>
+            <router-link to="/">
+                Voltar para Home
+            </router-link>
+        </section>
+    </main>
 </template>
 
 <script>
