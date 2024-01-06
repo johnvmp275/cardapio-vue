@@ -116,7 +116,7 @@ export default {
 }
 
 .tabela-scroll::-webkit-scrollbar-thumb {
-  background: #1f1d2b;
+  background: var(--background-cinza);
 }
 
 #tabela-pedido {
@@ -137,7 +137,7 @@ export default {
   padding: 12px;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  border-bottom: 3px solid #1f1d2b;
+  border-bottom: 3px solid var(--background-cinza);
 }
 
 .tabela-topo div {
@@ -150,7 +150,7 @@ export default {
   gap: 20px;
   width: 100%;
   padding: 12px;
-  border-bottom: 3px solid #1f1d2b;
+  border-bottom: 3px solid var(--background-cinza);
 }
 
 select {
@@ -160,26 +160,27 @@ select {
 
 .btn-produto {
   cursor: pointer;
-  max-width: 40%;
   width: 100%;
-  background: #ea7c69;
-  color: #fff;
+  max-width: 170px;
+  background: var(--background-laranja);
+  color: var(--background-branco);
   padding: 12px 6px;
   border: none;
   font-weight: bold;
 }
 
-.notificacao-container {}
+/* .notificacao-container {} */
 
 input {
   width: 100%;
+  border: 2px solid #1f1d2b36;
   padding: 12px 16px;
-  border-radius: 4px;
-  border: none;
 }
 
-.tabela-row .btn-produto,
-.tabela-row select {
+.tabela-row input {
+  max-width: 300px;
+}
+.tabela-row select{
   max-width: 200px;
 }
 </style>

@@ -172,7 +172,7 @@ export default {
 }
 
 .tabela-scroll::-webkit-scrollbar-thumb {
-  background: #1f1d2b;
+  background: var(--background-cinza);
 }
 
 #tabela-pedido {
@@ -196,7 +196,7 @@ export default {
 
 .tabela-topo {
   padding: 12px;
-  border-bottom: 3px solid #1f1d2b;
+  border-bottom: 3px solid var(--background-cinza);
 }
 
 .tabela-topo div {
@@ -218,7 +218,7 @@ export default {
 .tabela-row {
   width: 100%;
   padding: 12px;
-  border-bottom: 3px solid #1f1d2b;
+  border-bottom: 3px solid var(--background-cinza);
 }
 
 
@@ -231,8 +231,8 @@ select {
   cursor: pointer;
   max-width: 40%;
   width: 100%;
-  background: #1f1d2b;
-  color: #fff;
+  background: var(--background-cinza);
+  color: var(--background-branco);
   padding: 12px 6px;
   border: none;
   font-weight: bold;
@@ -256,7 +256,7 @@ select {
 }
 
 .tabela-row ul::-webkit-scrollbar-thumb {
-  background: #1f1d2b;
+  background: var(--background-cinza);
 }
 
 .notificacao-container {

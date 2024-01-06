@@ -40,6 +40,10 @@ select {
   outline: none;
 }
 
+button, input, select {
+  border-radius: 4px;
+}
+
 @media (max-width: 720px) {
   #app {
     display: block;

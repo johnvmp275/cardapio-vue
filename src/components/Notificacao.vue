@@ -25,7 +25,7 @@ export default {
   margin-top: 20px;
   display: flex;
   align-items: center;
-  color: #fff;
+  color: var(--background-branco);
   padding: 16px;
   width: 100%;
   max-width: 400px;
@@ -53,14 +53,14 @@ p::-webkit-scrollbar {
 }
 
 p::-webkit-scrollbar-thumb {
-  background: #fff;
+  background: var(--background-branco);
 }
 
 button {
   cursor: pointer;
   background: transparent;
   border: none;
-  color: #fff;
+  color: var(--background-branco);
 }
 
 button span {

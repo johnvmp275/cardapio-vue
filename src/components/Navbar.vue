@@ -45,7 +45,7 @@ nav {
   height: 100%;
   align-items: center;
   position: fixed;
-  background: #1f1d2b;
+  background: var(--background-cinza);
   flex-direction: column;
   border-radius: 0 8px 8px 0;
 }
@@ -74,7 +74,7 @@ a span {
   /* animation: animationLink .9s; */
   z-index: 10;
   transition: 0.5s;
-  color: #ea7c69;
+  color: var(--background-laranja);
   font-size: 34px;
 }
 
@@ -83,13 +83,13 @@ a span {
   height: 75px;
   position: relative;
   z-index: 300;
-  background: #ea7c69;
-  box-shadow: 0 0 20px 0px #ea7c69;
+  background: var(--background-laranja);
+  box-shadow: 0 0 20px 0px var(--background-laranja);
   border-radius: 10px;
 }
 
 a.router-link-active span {
-  color: #fff;
+  color: var(--background-branco);
 }
 
 .indicador {
@@ -98,9 +98,9 @@ a.router-link-active span {
   height: 90px;
   left: 10px;
   top: 63px;
-  background: #fff;
+  background: var(--background-branco);
   border-radius: 8px 0 0 8px;
-  border: 8px solid #fff;
+  border: 8px solid var(--background-branco);
   transition: 0.5s;
 }
 
@@ -112,8 +112,8 @@ a.router-link-active span {
   width: 20px;
   height: 20px;
   border-bottom-right-radius: 10px;
-  background: #1f1d2b;
-  box-shadow: 0 10px 0 0 #fff;
+  background: var(--background-cinza);
+  box-shadow: 0 10px 0 0 var(--background-branco);
 }
 
 .indicador::after {
@@ -124,8 +124,8 @@ a.router-link-active span {
   width: 20px;
   height: 20px;
   border-top-right-radius: 10px;
-  background: #1f1d2b;
-  box-shadow: 0 -10px 0 0 #fff;
+  background: var(--background-cinza);
+  box-shadow: 0 -10px 0 0 var(--background-branco);
 }
 
 a.router-link-active {

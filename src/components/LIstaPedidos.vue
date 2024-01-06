@@ -144,7 +144,7 @@ export default {
 }
 
 form {
-  background: #1f1d2b;
+  background: var(--background-cinza);
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -156,7 +156,7 @@ form {
 
 label {
   width: 100%;
-  color: #fff;
+  color: var(--background-branco);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -188,7 +188,7 @@ select {
 }
 
 .opcoes-container::-webkit-scrollbar-thumb {
-  background: #fff;
+  background: var(--background-branco);
 }
 
 .opcoes-container {
@@ -208,7 +208,7 @@ select {
 .opcoes-complementos {
   display: flex;
   gap: 20px;
-  color: #fff;
+  color: var(--background-branco);
   align-items: center;
   width: 50%;
   margin-bottom: 20px;
@@ -217,8 +217,8 @@ select {
 .btn-submit {
   cursor: pointer;
   margin-top: 20px;
-  color: #fff;
-  background: #ea7c69;
+  color: var(--background-branco);
+  background: var(--background-laranja);
   padding: 16px;
   font-weight: bold;
   font-size: 16px;
