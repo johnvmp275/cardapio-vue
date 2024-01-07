@@ -3,7 +3,7 @@ import MassageNot from './Notificacao.vue'
 </script>
 
 <template >
-  <div v-if="pedidos.length > 0">
+  <div>
     <h1>Gerencie o Fluxo de Pedidos:</h1>
     <div class="tabela-scroll">
       <MassageNot :msg="msg" :icon="icon" v-show="msg" @click="Close()" />
