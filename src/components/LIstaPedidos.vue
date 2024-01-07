@@ -3,7 +3,8 @@ import MassageNot from './Notificacao.vue'
 </script>
 
 <template>
-  <div>
+  <div >
+    <h1>Comandas e Pedidos:</h1>
     <section class="pedidosForm">
       <form id="pedido-formulario" method="POST" @submit="criarPedido">
         <!-- Cadastrar o nome do Cliente -->

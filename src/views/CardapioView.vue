@@ -1,5 +1,5 @@
 <script setup>
-import MenuCardapio from '../components/MenuCardapio.vue'
+import MenuCardapio from '../components/LIstaPedidos.vue'
 </script>
 
 <template>

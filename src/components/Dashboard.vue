@@ -2,49 +2,51 @@
 import MassageNot from './Notificacao.vue'
 </script>
 
-<template>
-  <h1>Gerencie o Fluxo de Pedidos:</h1>
-  <div class="tabela-scroll">
-    <MassageNot :msg="msg" :icon="icon" v-show="msg" @click="Close()" />
-    <div id="tabela-pedido">
-      <div>
-        <div class="tabela-topo">
-          <div class="order-id">#:</div>
-          <div>Cliente:</div>
-          <div>Pedido:</div>
-          <div>Acompanhamento:</div>
-          <div>Complementos:</div>
-          <div class="observacao-cliente">Observação:</div>
-          <div>Status:</div>
-        </div>
-      </div>
-      <div id="tabela-rows">
-        <p class="aviso-sem-estoque" v-if="!pedidos.length">Ops! Ainda Não possui nenhum pedido </p>
-        <div class="tabela-row" v-for="pedido in pedidos" :key="pedido.id">
-          <div class="id-pedido">{{ pedido.id }}</div>
-          <div>{{ pedido.nome }}</div>
-          <div>{{ pedido.comida }}</div>
-          <div>{{ pedido.acompanhamento }}</div>
-          <div>
-            <ul>
-              <li v-for="(opcional, index) in pedido.opcionais" :key="index">
-                <p>{{ opcional }}</p>
-              </li>
-            </ul>
+<template >
+  <div v-if="pedidos.length > 0">
+    <h1>Gerencie o Fluxo de Pedidos:</h1>
+    <div class="tabela-scroll">
+      <MassageNot :msg="msg" :icon="icon" v-show="msg" @click="Close()" />
+      <div id="tabela-pedido">
+        <div>
+          <div class="tabela-topo">
+            <div class="order-id">#:</div>
+            <div>Cliente:</div>
+            <div>Pedido:</div>
+            <div>Acompanhamento:</div>
+            <div>Complementos:</div>
+            <div class="observacao-cliente">Observação:</div>
+            <div>Status:</div>
           </div>
-          <button class="btn-observacao" @click="popUp(pedido.observacoes)">
-            <span class="material-symbols-outlined">
-              visibility
-            </span>
-          </button>
-          <div class="status-pedido">
-            <select name="status" id="status" @change="updateStatus($event, pedido.id)">
-              <option value="Aguardando...">Aguardando..</option>
-              <option v-for=" s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
-                {{ s.tipo }}
-              </option>
-            </select>
-            <button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</button>
+        </div>
+        <div id="tabela-rows">
+          <p class="aviso-sem-estoque" v-if="!pedidos.length">Ops! Ainda Não possui nenhum pedido </p>
+          <div class="tabela-row" v-for="pedido in pedidos" :key="pedido.id">
+            <div class="id-pedido">{{ pedido.id }}</div>
+            <div>{{ pedido.nome }}</div>
+            <div>{{ pedido.comida }}</div>
+            <div>{{ pedido.acompanhamento }}</div>
+            <div>
+              <ul>
+                <li v-for="(opcional, index) in pedido.opcionais" :key="index">
+                  <p>{{ opcional }}</p>
+                </li>
+              </ul>
+            </div>
+            <button class="btn-observacao" @click="popUp(pedido.observacoes)">
+              <span class="material-symbols-outlined">
+                visibility
+              </span>
+            </button>
+            <div class="status-pedido">
+              <select name="status" id="status" @change="updateStatus($event, pedido.id)">
+                <option value="Aguardando...">Aguardando..</option>
+                <option v-for=" s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
+                  {{ s.tipo }}
+                </option>
+              </select>
+              <button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</button>
+            </div>
           </div>
         </div>
       </div>
