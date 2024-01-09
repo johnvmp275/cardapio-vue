@@ -3,14 +3,21 @@ import MassageNot from './Notificacao.vue'
 </script>
 
 <template>
-  <div >
+  <div>
     <h1>Comandas e Pedidos:</h1>
     <section class="pedidosForm">
       <form id="pedido-formulario" method="POST" @submit="criarPedido">
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
+          <input
+            type="text"
+            name="nome"
+            id="nome"
+            v-model="nome"
+            placeholder="Nome do Cliente"
+            required
+          />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
@@ -25,8 +32,12 @@ import MassageNot from './Notificacao.vue'
         <div class="opcoes-container">
           <label for="acompanhamento">Acompanhamentos:</label>
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
-            <option value="null" selected style="display: none;">Selecione o Pedido</option>
-            <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
+            <option value="null" selected style="display: none">Selecione o Pedido</option>
+            <option
+              v-for="acompanhamento in acompanhamentos"
+              :key="acompanhamento.id"
+              :value="acompanhamento.tipo"
+            >
               {{ acompanhamento.tipo }}
             </option>
           </select>
@@ -44,8 +55,13 @@ import MassageNot from './Notificacao.vue'
         <!-- Cadastrar as observações -->
         <div class="cliente-container">
           <label for="observacoes">Observações sobre o Cliente:</label>
-          <input type="text" name="observacoes" id="observacoes" v-model="observacoes"
-            placeholder="Registre as suas observações" />
+          <input
+            type="text"
+            name="observacoes"
+            id="observacoes"
+            v-model="observacoes"
+            placeholder="Registre as suas observações"
+          />
         </div>
         <!-- input para postar o peidido para aba de pedidos -->
         <div class="button-submit">
@@ -83,9 +99,8 @@ export default {
         this.comidas = data.comidas
         this.acompanhamentos = data.acompanhamentos
         this.opcionaisData = data.opcionais
-      }
-      catch (error) {
-        console.error("Houve um erro de busca", error);
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
       }
     },
 
@@ -128,7 +143,7 @@ export default {
         this.acompanhamento = 'null'
         // this.opcionais = ''
       } catch (error) {
-        console.error("Houve um erro de busca", error);
+        console.error('Houve um erro de busca', error)
       }
     }
   },
@@ -199,6 +214,7 @@ select {
   flex-direction: row;
   flex-wrap: wrap;
   height: 100px;
+  gap: 8px;
 }
 
 .opcoes-container input {
@@ -208,11 +224,14 @@ select {
 
 .opcoes-complementos {
   display: flex;
+  background: var(--background-branco);
   gap: 20px;
-  color: var(--background-branco);
+  color: var(--background-cinza);
   align-items: center;
-  width: 50%;
-  margin-bottom: 20px;
+  padding: 6px;
+  width: 48%;
+  margin-bottom: 5px;
+  border-radius: 4px;
 }
 
 .btn-submit {
