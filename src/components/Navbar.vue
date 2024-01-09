@@ -3,6 +3,8 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
+
+  <!-- desktop version -->
   <nav class="navigation-desktop">
     <section class="navigation-section">
       <div class="navigation-link">
@@ -27,7 +29,9 @@ import { RouterLink } from 'vue-router'
       </div>
     </section>
   </nav>
-  <nav class="navigation-mobile">
+
+  <!-- mobile version -->
+  <!-- <nav class="navigation-mobile">
     <section class="navigation-section-mobile">
       <div class="navigation-link-mobile">
         <RouterLink to="/">
@@ -50,7 +54,7 @@ import { RouterLink } from 'vue-router'
         </div>
       </div>
     </section>
-  </nav>
+  </nav> -->
 </template>
 
 <style scoped>
