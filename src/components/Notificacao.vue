@@ -1,6 +1,6 @@
 <template>
   <div class="notificacao-container">
-    <span class="material-symbols-outlined"> {{icon}} </span>
+    <span class="material-symbols-outlined"> {{ icon }} </span>
     <p>
       {{ msg }}
     </p>

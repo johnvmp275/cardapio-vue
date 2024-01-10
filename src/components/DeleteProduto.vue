@@ -1,5 +1,6 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
+import Tabela from './Tabela.vue'
 </script>
 
 <template>
@@ -20,14 +21,11 @@ import MassageNot from './Notificacao.vue'
           </select>
           <div>Editar:</div>
         </div>
-        <div id="tabela-rows">
-          <div class="tabela-row" v-for="comida in itensCategoria" :key="comida.id">
-            <div class="id-pedido">{{ comida.id }}</div>
-            <p>{{ comida.tipo }}</p>
-            <button @click="deleteProduto(comida.id)" class="btn-produto">Remover</button>
-          </div>
-          <p class="aviso-sem-estoque" v-if="!itensCategoria.length">Não há itens nesta categoria.</p>
-        </div>
+        <Tabela :getDados="getDados" 
+                :categoria="categoria" 
+                :comidas="comidas" 
+                :acompanhamentos="acompanhamentos"
+                :opcionais="opcionais" />
       </div>
     </div>
   </div>
@@ -72,7 +70,7 @@ export default {
         console.error("Houve um erro de busca", error);
       }
     },
-    async deleteProduto(id) {
+    async deleteProduto({ categoria, id }) {
       try {
         const dadosString = this.dados;
         const index = dadosString[this.categoria];
@@ -108,9 +106,7 @@ export default {
       } catch (error) {
         console.error("Houve um erro durante a exclusão do produto", error);
       }
-
     },
-
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
       this.itensCategoria = this[this.categoria];
