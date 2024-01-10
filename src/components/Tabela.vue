@@ -16,6 +16,10 @@ export default {
             type: Function,
             required: true,
         },
+        deleteProduto: {
+            type: Function,
+            required: true,
+        },
         categoria: {
             type: String,
             required: true,
@@ -36,7 +40,7 @@ export default {
     methods: {
         deleteItem(id) {
             // Emitir evento para o componente pai para manipulação dos dados
-            this.$emit('delete-item', { categoria: this.categoria, id });
+          this.deleteProduto(id)
         },
         async fetchData() {
             // Chama a função getDados recebida como prop

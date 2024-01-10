@@ -21,11 +21,16 @@ import Tabela from './Tabela.vue'
           </select>
           <div>Editar:</div>
         </div>
-        <Tabela :getDados="getDados" 
-                :categoria="categoria" 
-                :comidas="comidas" 
-                :acompanhamentos="acompanhamentos"
-                :opcionais="opcionais" />
+        <Tabela
+          :getDados="getDados"
+          :categoria="categoria"
+          :comidas="comidas"
+          :acompanhamentos="acompanhamentos"
+          :opcionais="opcionais"
+          :deleteProduto="deleteProduto"
+          :updateList="updateList"
+          :key="listKey"
+        />
       </div>
     </div>
   </div>
@@ -37,8 +42,8 @@ export default {
   props: {
     boolProp: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
@@ -46,12 +51,14 @@ export default {
       msg: null,
       comidas: [],
       acompanhamentos: [],
-      opcionais: []
+      opcionais: [],
+      updateList: true,
+      listKey: 0
     }
   },
   computed: {
     itensCategoria() {
-      return this[this.categoria] || [];
+      return this[this.categoria] || []
     }
   },
   methods: {
@@ -62,24 +69,23 @@ export default {
 
         this.dados = data
 
-        this.comidas = data.comidas || [];
-        this.acompanhamentos = data.acompanhamentos || [];
-        this.opcionais = data.opcionais || [];
-      }
-      catch (error) {
-        console.error("Houve um erro de busca", error);
+        this.comidas = data.comidas || []
+        this.acompanhamentos = data.acompanhamentos || []
+        this.opcionais = data.opcionais || []
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
       }
     },
-    async deleteProduto({ categoria, id }) {
+    async deleteProduto(id) {
       try {
-        const dadosString = this.dados;
-        const index = dadosString[this.categoria];
+        const dadosString = this.dados
+        const index = dadosString[this.categoria]
 
-        const itemId = index.findIndex(item => item.id === id);
+        const itemId = index.findIndex((item) => item.id === id)
 
         if (itemId !== -1) {
-          console.log(itemId);
-          index.splice(itemId, 1);
+          console.log(itemId)
+          index.splice(itemId, 1)
 
           const req = await fetch('http://localhost:3000/ingredientes', {
             method: 'PUT',
@@ -87,33 +93,33 @@ export default {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(dadosString)
-          });
+          })
 
           if (req.ok) {
-
-            this.msg = `O Produto N° ${id} foi removido!`;
+            this.msg = `O Produto N° ${id} foi removido!`
 
             setTimeout(() => {
-              this.msg = '';
-            }, 3000);
-
+              this.msg = ''
+            }, 3000)
+            this.updateList = !this.updateList
+            this.listKey += 1
           } else {
-            throw new Error('Falha ao atualizar os dados no servidor');
+            throw new Error('Falha ao atualizar os dados no servidor')
           }
         } else {
-          console.error('Item não encontrado');
+          console.error('Item não encontrado')
         }
       } catch (error) {
-        console.error("Houve um erro durante a exclusão do produto", error);
+        console.error('Houve um erro durante a exclusão do produto', error)
       }
     },
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
-      this.itensCategoria = this[this.categoria];
+      this.itensCategoria = this[this.categoria]
     }
   },
   mounted() {
-    this.getDados();
+    this.getDados()
   }
 }
 </script>

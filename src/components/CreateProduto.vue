@@ -93,6 +93,8 @@ export default {
         // //Limpar campos ao enviar
         this.categoria = 'null'
         this.tipo = ''
+
+        this.getDados()
       } catch (error) {
         console.error("Houve um erro de busca", error);
       }
