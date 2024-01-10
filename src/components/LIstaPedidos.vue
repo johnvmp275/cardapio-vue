@@ -52,17 +52,6 @@ import MassageNot from './Notificacao.vue'
             </div>
           </section>
         </div>
-        <!-- Cadastrar as observações -->
-        <div class="cliente-container">
-          <label for="observacoes">Observações sobre o Cliente:</label>
-          <input
-            type="text"
-            name="observacoes"
-            id="observacoes"
-            v-model="observacoes"
-            placeholder="Registre as suas observações"
-          />
-        </div>
         <!-- input para postar o peidido para aba de pedidos -->
         <div class="button-submit">
           <input class="btn-submit" type="submit" value="Postar" />
@@ -82,7 +71,6 @@ export default {
       acompanhamentos: null,
       opcionaisData: null,
       nome: null,
-      observacoes: '',
       comida: null,
       acompanhamento: null,
       opcionais: [],
@@ -110,7 +98,6 @@ export default {
 
         const data = {
           nome: this.nome,
-          observacoes: this.observacoes,
           comida: this.comida,
           acompanhamento: this.acompanhamento,
           opcionais: Array.from(this.opcionais),
@@ -138,7 +125,6 @@ export default {
 
         //Limpar campos ao enviar
         this.nome = ''
-        this.observacoes = ''
         this.comida = 'null'
         this.acompanhamento = 'null'
         // this.opcionais = ''

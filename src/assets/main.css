@@ -46,6 +46,6 @@ button, input, select {
 
 @media (max-width: 720px) {
   #app {
-    display: block;
+    display: flex;
   }
 }

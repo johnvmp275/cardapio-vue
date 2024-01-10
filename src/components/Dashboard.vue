@@ -15,7 +15,6 @@ import MassageNot from './Notificacao.vue'
             <div>Pedido:</div>
             <div>Acompanhamento:</div>
             <div>Complementos:</div>
-            <div class="observacao-cliente">Observação:</div>
             <div>Status:</div>
           </div>
         </div>
@@ -33,11 +32,6 @@ import MassageNot from './Notificacao.vue'
                 </li>
               </ul>
             </div>
-            <button class="btn-observacao" @click="popUp(pedido.observacoes)">
-              <span class="material-symbols-outlined">
-                visibility
-              </span>
-            </button>
             <div class="status-pedido">
               <select name="status" id="status" @change="updateStatus($event, pedido.id)">
                 <option value="Aguardando...">Aguardando..</option>
@@ -127,7 +121,7 @@ export default {
         });
 
         const res = await req.json();
-
+        
         //Mensagem do sistema ao enviar pedido
         this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`;
         this.color = 'green';
@@ -190,7 +184,7 @@ export default {
 .tabela-row {
   display: grid;
   padding: 12px;
-  grid-template-columns: 50px repeat(4, 1.8fr) 1.2fr 3fr;
+  grid-template-columns: 50px repeat(4, 1.8fr) 3fr;
   width: 100%;
   align-items: center;
   gap: 4px;
