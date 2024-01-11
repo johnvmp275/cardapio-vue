@@ -120,6 +120,7 @@ export default {
               this.msg = '';
             }, 3000);
 
+            this.getDados();
             this.updateList = !this.updateList;
             this.listKey += 1;
 
@@ -139,16 +140,11 @@ export default {
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
       this.itensCategoria = this[this.categoria]
-
-      this.updateList = !this.updateList
-      this.listKey += 1
+      this.paginaAtual = 1;
     },
     numerosPagina() {
       this.paginaAtual = 1
-      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString());
-
-      this.updateList = !this.updateList
-      this.listKey += 1
+      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString());  
     },
     carregarConfiguracoes() {
       const itensPorPaginaSalvos = localStorage.getItem('itensPorPagina')

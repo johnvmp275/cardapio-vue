@@ -31,7 +31,9 @@ import DeleteProduto from './DeleteProduto.vue'
       </div>
     </div>
   </div>
-  <DeleteProduto :update="update" :key="updateKey" />
+  <DeleteProduto :update="update" 
+                :key="updateKey"
+                 />
 </template>
 
 <script>
@@ -54,9 +56,17 @@ export default {
         const req = await fetch('http://localhost:3000/ingredientes')
         const data = await req.json()
 
+        this.totalItens = data.total || 0
+
         this.dados = data
+
+        this.comidas = data.comidas || []
+        this.acompanhamentos = data.acompanhamentos || []
+        this.opcionais = data.opcionais || []
+
+        this.itensCategoria = this[this.categoria]
       } catch (error) {
-        console.error("Houve um erro de busca", error);
+        console.error('Houve um erro de busca', error)
       }
     },
     async criarProduto() {
@@ -86,6 +96,8 @@ export default {
         // Mensagem do sistema ao enviar pedido
         this.update = !this.update;
         this.updateKey += 1;
+
+        this.getDados()
         this.msg = `O Produto: ${this.tipo} acabou de ser criado!`;
 
         // Limpar mensagem após enviar
