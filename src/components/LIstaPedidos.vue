@@ -1,8 +1,10 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
+import Loader from './Loader.vue'
 </script>
 
 <template>
+  <Loader :isLoader="isLoader" />
   <div>
     <h1>Comandas e Pedidos:</h1>
     <section class="pedidosForm">
@@ -10,14 +12,7 @@ import MassageNot from './Notificacao.vue'
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input
-            type="text"
-            name="nome"
-            id="nome"
-            v-model="nome"
-            placeholder="Nome do Cliente"
-            required
-          />
+          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
@@ -33,11 +28,7 @@ import MassageNot from './Notificacao.vue'
           <label for="acompanhamento">Acompanhamentos:</label>
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
-            <option
-              v-for="acompanhamento in acompanhamentos"
-              :key="acompanhamento.id"
-              :value="acompanhamento.tipo"
-            >
+            <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
               {{ acompanhamento.tipo }}
             </option>
           </select>
@@ -68,6 +59,7 @@ export default {
   data() {
     return {
       comidas: null,
+      isLoader: true,
       acompanhamentos: null,
       opcionaisData: null,
       nome: null,

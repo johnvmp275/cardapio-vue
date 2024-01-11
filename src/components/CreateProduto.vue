@@ -80,28 +80,34 @@ export default {
 
         const res = await req.json()
 
-        //Mensagem do sistema ao enviar pedido
+        // Atualize os dados localmente após criar um novo produto
+        this.dados = res;
+
+        // Mensagem do sistema ao enviar pedido
         this.update = !this.update;
         this.updateKey += 1;
         this.msg = `O Produto: ${this.tipo} acabou de ser criado!`;
 
-        //Limpar mensagem após enviar
+        // Limpar mensagem após enviar
         setTimeout(() => {
           this.msg = ''
         }, 3000)
 
-        // //Limpar campos ao enviar
+        // Limpar campos ao enviar
         this.categoria = 'null'
         this.tipo = ''
-
-        this.getDados()
       } catch (error) {
-        console.error("Houve um erro de busca", error);
+        console.error("Houve um erro ao criar o produto", error);
       }
-    }
+    },
   },
-  created() {
+  mounted() {
     this.getDados()
+    // document.onreadystatechange = () => {
+    //   if (document.readyState == "complete") {
+    //     this.isLoader = true;
+    //   }
+    // }
   }
 }
 </script>
@@ -182,7 +188,8 @@ input {
 .tabela-row input {
   max-width: 300px;
 }
-.tabela-row select{
+
+.tabela-row select {
   max-width: 200px;
 }
 </style>

@@ -1,9 +1,11 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
-import Tabela from './Tabela.vue'
+import Tabela from './TabelaRow.vue'
+import Loader from './Loader.vue'
 </script>
 
 <template>
+  <Loader/>
   <h2>Limpeza do Cardápio:</h2>
   <div>
     <div class="tabela-scroll">
@@ -19,19 +21,28 @@ import Tabela from './Tabela.vue'
             <option value="acompanhamentos">Acompanhamento</option>
             <option value="opcionais">Complemento</option>
           </select>
+          <select name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina" @change="numerosPagina">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="6" selected>6</option>
+          </select>
           <div>Editar:</div>
         </div>
-        <Tabela
-          :getDados="getDados"
-          :categoria="categoria"
-          :comidas="comidas"
-          :acompanhamentos="acompanhamentos"
-          :opcionais="opcionais"
-          :deleteProduto="deleteProduto"
-          :updateList="updateList"
-          :key="listKey"
-        />
+        <Tabela :getDados="getDados" :categoria="categoria" :comidas="comidas" :acompanhamentos="acompanhamentos"
+          :opcionais="opcionais" :deleteProduto="deleteProduto" :updateList="updateList" :key="listKey"
+          :itensPorPagina="itensPorPagina" :paginaAtual="paginaAtual" />
       </div>
+      <section class="pagination-section">
+        <div class="pagination">
+          <button @click="paginaAnterior" :disabled="paginaAtual === 1">
+            <span class="material-symbols-outlined"> arrow_back_ios </span>
+          </button>
+          <span>Página {{ paginaAtual }} de {{ totalPages }}</span>
+          <button @click="proximaPagina" :disabled="paginaAtual === totalPages">
+            <span class="material-symbols-outlined"> arrow_forward_ios </span>
+          </button>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -53,12 +64,15 @@ export default {
       acompanhamentos: [],
       opcionais: [],
       updateList: true,
-      listKey: 0
+      listKey: 0,
+      itensPorPagina: 6,
+      paginaAtual: 1,
     }
   },
   computed: {
-    itensCategoria() {
-      return this[this.categoria] || []
+    totalPages() {
+      const allItems = this[this.categoria] || []
+      return Math.ceil(allItems.length / this.itensPorPagina)
     }
   },
   methods: {
@@ -67,59 +81,100 @@ export default {
         const req = await fetch('http://localhost:3000/ingredientes')
         const data = await req.json()
 
+        this.totalItens = data.total || 0
+
         this.dados = data
 
         this.comidas = data.comidas || []
         this.acompanhamentos = data.acompanhamentos || []
         this.opcionais = data.opcionais || []
+
+        this.itensCategoria = this[this.categoria]
       } catch (error) {
         console.error('Houve um erro de busca', error)
       }
     },
     async deleteProduto(id) {
       try {
-        const dadosString = this.dados
-        const index = dadosString[this.categoria]
+        const dadosString = JSON.parse(JSON.stringify(this.dados)); // Criar uma cópia profunda dos dados
+        const index = dadosString[this.categoria];
 
-        const itemId = index.findIndex((item) => item.id === id)
+        const itemId = index.findIndex((item) => item.id === id);
 
         if (itemId !== -1) {
-          console.log(itemId)
-          index.splice(itemId, 1)
+          // Remover localmente
+          const removedItem = index.splice(itemId, 1)[0];
 
+
+          // Enviar a requisição PUT para o servidor
           const req = await fetch('http://localhost:3000/ingredientes', {
             method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dadosString)
-          })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosString),
+          });
 
           if (req.ok) {
-            this.msg = `O Produto N° ${id} foi removido!`
+            this.msg = `O Produto N° ${id} foi removido!`;
 
             setTimeout(() => {
-              this.msg = ''
-            }, 3000)
-            this.updateList = !this.updateList
-            this.listKey += 1
+              this.msg = '';
+            }, 3000);
+
+            this.updateList = !this.updateList;
+            this.listKey += 1;
+
           } else {
-            throw new Error('Falha ao atualizar os dados no servidor')
+            // Se houver um erro, reverta a remoção local
+            index.splice(itemId, 0, removedItem);
+            throw new Error('Falha ao atualizar os dados no servidor');
           }
         } else {
-          console.error('Item não encontrado')
+          console.error('Item não encontrado');
         }
       } catch (error) {
-        console.error('Houve um erro durante a exclusão do produto', error)
+        console.error('Houve um erro durante a exclusão do produto', error);
       }
     },
+
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
       this.itensCategoria = this[this.categoria]
-    }
+
+      this.updateList = !this.updateList
+      this.listKey += 1
+    },
+    numerosPagina() {
+      this.paginaAtual = 1
+      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString());
+
+      this.updateList = !this.updateList
+      this.listKey += 1
+    },
+    carregarConfiguracoes() {
+      const itensPorPaginaSalvos = localStorage.getItem('itensPorPagina')
+      if (itensPorPaginaSalvos) {
+        this.itensPorPagina = parseInt(itensPorPaginaSalvos)
+      }
+    },
+    irParaPagina(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.paginaAtual = pageNumber
+      }
+    },
+    paginaAnterior() {
+      if (this.paginaAtual > 1) {
+        this.paginaAtual--
+      }
+    },
+    proximaPagina() {
+      if (this.paginaAtual < this.totalPages) {
+        this.paginaAtual++
+      }
+    },
   },
   mounted() {
     this.getDados()
+    this.carregarConfiguracoes()
   }
 }
 </script>
@@ -144,8 +199,7 @@ export default {
   min-width: 1298px;
 }
 
-.tabela-topo,
-.tabela-row {
+.tabela-topo {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -155,40 +209,16 @@ export default {
 .tabela-topo {
   display: grid;
   padding: 12px;
-  grid-template-columns: 50px 2fr 2fr 1.07fr;
+  grid-template-columns: 50px 2fr 2fr 2fr 1.58fr;
   gap: 20px;
   height: 70px;
   border-bottom: 3px solid var(--background-cinza);
-}
-
-#tabela-rows {
-  display: flex;
-  flex-direction: column;
-  height: 325px;
-  overflow: hidden;
-  overflow-y: auto;
-}
-
-#tabela-rows::-webkit-scrollbar {
-  width: 10px;
-}
-
-#tabela-rows::-webkit-scrollbar-thumb {
-  background: var(--background-cinza);
 }
 
 .tabela-topo div {
   font-weight: bold;
 }
 
-.tabela-row {
-  display: grid;
-  grid-template-columns: 50px 4fr 1fr;
-  gap: 20px;
-  width: 100%;
-  padding: 12px;
-  border-bottom: 3px solid var(--background-cinza);
-}
 
 .btn-produto {
   cursor: pointer;
@@ -205,15 +235,6 @@ export default {
   background: red;
 }
 
-.tabela-row div {
-  display: grid;
-  grid-template-columns: 50px 4fr 1fr;
-}
-
-.tabela-row p {
-  font-weight: bold;
-}
-
 select {
   cursor: pointer;
   max-width: 200px;
@@ -226,24 +247,34 @@ option {
   cursor: pointer;
 }
 
-.aviso-sem-estoque {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  height: 300px;
-}
-
-.aviso-sem-estoque::after {
-  content: ':(';
-  margin-left: 10px;
-}
-
 h2 {
   margin-top: 2rem;
   font-size: 2rem;
   text-align: center;
   font-weight: bold;
   margin-bottom: 2rem;
+}
+
+.pagination-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination button {
+  cursor: pointer;
+  width: 36px;
+  background: var(--background-laranja);
+  border: none;
+  display: flex;
+  padding: 6px;
+  text-align: center;
+  color: var(--background-branco);
 }
 </style>

@@ -24,6 +24,14 @@ export default {
             type: String,
             required: true,
         },
+        itensPorPagina: {
+            type: String,
+            required: true,
+        },
+        paginaAtual: {
+            type: String,
+            required: true,
+        },
         comidas: {
             type: Array,
             required: true,
@@ -38,29 +46,27 @@ export default {
         }
     },
     methods: {
-        deleteItem(id) {
-            // Emitir evento para o componente pai para manipulação dos dados
-          this.deleteProduto(id)
-        },
         async fetchData() {
-            // Chama a função getDados recebida como prop
             await this.getDados();
         },
     },
     computed: {
         itensCategoria() {
-            return this[this.categoria] || [];
-        }
+            const startIndex = (this.paginaAtual - 1) * this.itensPorPagina;
+            const endIndex = startIndex + parseInt(this.itensPorPagina);
+            const allItems = this[this.categoria] || [];
+
+            return allItems.slice(startIndex, endIndex);
+        },
     },
-    mounted() {
-        this.fetchData(); // Chama a função para carregar os dados ao montar o componente
+    created() {
+        this.fetchData();
     },
 };
 </script>
 
 
 <style scoped>
-
 #tabela-rows {
     display: flex;
     flex-direction: column;
@@ -79,6 +85,7 @@ export default {
 
 .tabela-row {
     display: grid;
+    align-items: center;
     grid-template-columns: 50px 4fr 1fr;
     gap: 20px;
     width: 100%;

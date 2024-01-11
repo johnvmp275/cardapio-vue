@@ -1,8 +1,10 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
+import Loader from './Loader.vue'
 </script>
 
-<template >
+<template>
+  <Loader :isLoader="isLoader" />
   <div>
     <h1>Gerencie o Fluxo de Pedidos:</h1>
     <div class="tabela-scroll">
@@ -57,6 +59,7 @@ export default {
       pedidos: [],
       pedidosId: null,
       status: [],
+      isLoader: true,
       msg: null
     }
   },
@@ -121,7 +124,7 @@ export default {
         });
 
         const res = await req.json();
-        
+
         //Mensagem do sistema ao enviar pedido
         this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`;
         this.color = 'green';
