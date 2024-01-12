@@ -11,18 +11,12 @@
 
 <script>
 export default {
-    data() {
-        return{
-            isLoader: false,
-        }
+    props: {
+        isLoader: {
+            type: String,
+            required: false,
+        },
     },
-    mounted() {
-        document.onreadystatechange = () => {
-            if (document.readyState == "complete") {
-                this.isLoader = true;
-            }
-        }
-    }
 }
 </script>
 
@@ -55,24 +49,24 @@ export default {
 
 .esfera01 {
     background: var(--background-laranja);
-    animation: esfera-animation .7s  infinite;
+    animation: esfera-animation .7s infinite;
 }
 
 .esfera02 {
     background: var(--background-laranja);
-    animation: esfera-animation .7s  infinite;
+    animation: esfera-animation .7s infinite;
     animation-delay: 200ms;
 }
 
 .esfera03 {
     background: var(--background-laranja);
-    animation: esfera-animation .7s  infinite;
+    animation: esfera-animation .7s infinite;
     animation-delay: 400ms;
 }
 
 .esfera04 {
     background: var(--background-laranja);
-    animation: esfera-animation .7s  infinite;
+    animation: esfera-animation .7s infinite;
     animation-delay: 600ms;
 }
 

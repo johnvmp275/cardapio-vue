@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       comidas: null,
-      isLoader: true,
+      isLoader: false,
       acompanhamentos: null,
       opcionaisData: null,
       nome: null,
@@ -79,6 +79,8 @@ export default {
         this.comidas = data.comidas
         this.acompanhamentos = data.acompanhamentos
         this.opcionaisData = data.opcionais
+
+        this.isLoader = true
       } catch (error) {
         console.error('Houve um erro de busca', error)
       }

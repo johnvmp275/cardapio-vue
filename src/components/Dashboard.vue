@@ -59,7 +59,7 @@ export default {
       pedidos: [],
       pedidosId: null,
       status: [],
-      isLoader: true,
+      isLoader: false,
       msg: null
     }
   },
@@ -83,6 +83,8 @@ export default {
         const data = await req.json();
 
         this.status = data;
+
+        this.isLoader = true
       }
       catch (error) {
         console.error("Houve um erro de busca", error);

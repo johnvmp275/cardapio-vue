@@ -31,9 +31,7 @@ import DeleteProduto from './DeleteProduto.vue'
       </div>
     </div>
   </div>
-  <DeleteProduto :update="update" 
-                :key="updateKey"
-                 />
+  <DeleteProduto :update="update" :key="updateKey" />
 </template>
 
 <script>
@@ -97,7 +95,6 @@ export default {
         this.update = !this.update;
         this.updateKey += 1;
 
-        this.getDados()
         this.msg = `O Produto: ${this.tipo} acabou de ser criado!`;
 
         // Limpar mensagem após enviar
@@ -108,6 +105,8 @@ export default {
         // Limpar campos ao enviar
         this.categoria = 'null'
         this.tipo = ''
+
+        this.getDados()
       } catch (error) {
         console.error("Houve um erro ao criar o produto", error);
       }
@@ -115,11 +114,6 @@ export default {
   },
   mounted() {
     this.getDados()
-    // document.onreadystatechange = () => {
-    //   if (document.readyState == "complete") {
-    //     this.isLoader = true;
-    //   }
-    // }
   }
 }
 </script>
