@@ -146,14 +146,6 @@ export default {
         console.error('Houve um erro de busca', error)
       }
     },
-    popUp(observacoes) {
-      // this.msg = `${observacoes}`
-      // this.color = 'orange';
-      // this.icon = 'visibility'
-      // setTimeout(() => {
-      //   this.msg = ''
-      // }, 3000)
-    },
     Close() {
       // this.msg = ''
     }
