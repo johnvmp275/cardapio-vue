@@ -72,7 +72,7 @@ export default {
 
 @keyframes esfera-animation {
     0% {
-        transform: translateY(0px);
+        transform: translateY(0);
     }
 
     50% {
@@ -80,7 +80,7 @@ export default {
     }
 
     100% {
-        transform: translateY(0px);
+        transform: translateY(0);
     }
 }
 </style>
