@@ -21,7 +21,9 @@ import Loader from './Loader.vue'
           </div>
         </div>
         <div id="tabela-rows">
-          <p class="aviso-sem-estoque" v-if="!pedidos.length">Ops! Ainda Não possui nenhum pedido </p>
+          <p class="aviso-sem-estoque" v-if="!pedidos.length">
+            Ops! Ainda Não possui nenhum pedido
+          </p>
           <div class="tabela-row" v-for="pedido in pedidos" :key="pedido.id">
             <div class="id-pedido">{{ pedido.id }}</div>
             <div>{{ pedido.nome }}</div>
@@ -37,7 +39,12 @@ import Loader from './Loader.vue'
             <div class="status-pedido">
               <select name="status" id="status" @change="updateStatus($event, pedido.id)">
                 <option value="Aguardando...">Aguardando..</option>
-                <option v-for=" s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
+                <option
+                  v-for="s in status"
+                  :key="s.id"
+                  :value="s.tipo"
+                  :selected="pedido.status == s.tipo"
+                >
                   {{ s.tipo }}
                 </option>
               </select>
@@ -66,40 +73,37 @@ export default {
   methods: {
     async getPedidos() {
       try {
-        const req = await fetch('http://localhost:3000/pedidos');
-        const data = await req.json();
+        const req = await fetch('http://localhost:3000/pedidos')
+        const data = await req.json()
 
-        this.pedidos = data;
+        this.pedidos = data
         // resgate de status do pedidos
-        this.getStatus();
+        this.getStatus()
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
       }
-      catch (error) {
-        console.error("Houve um erro de busca", error);
-      }
+      this.isLoader = true
     },
     async getStatus() {
       try {
-        const req = await fetch('http://localhost:3000/status');
-        const data = await req.json();
+        const req = await fetch('http://localhost:3000/status')
+        const data = await req.json()
 
-        this.status = data;
-
-        this.isLoader = true
-      }
-      catch (error) {
-        console.error("Houve um erro de busca", error);
+        this.status = data
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
       }
     },
     async deletePedido(id) {
       try {
         const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
-          method: "DELETE"
-        });
-        const res = await req.json();
+          method: 'DELETE'
+        })
+        const res = await req.json()
 
         //Mensagem do sistema ao enviar pedido
-        this.msg = `O Pedido N° ${id} foi removido!`;
-        this.color = 'red';
+        this.msg = `O Pedido N° ${id} foi removido!`
+        this.color = 'red'
         this.icon = 'warning'
 
         //Limpar mensagem após enviar
@@ -108,28 +112,27 @@ export default {
         }, 3000)
 
         this.getPedidos()
-      }
-      catch (error) {
-        console.error("Houve um erro de busca", error);
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
       }
     },
     async updateStatus(event, id) {
       try {
-        const option = event.target.value;
+        const option = event.target.value
 
-        const dataJson = JSON.stringify({ status: option });
+        const dataJson = JSON.stringify({ status: option })
 
         const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
-          method: "PATCH",
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: dataJson
-        });
+        })
 
-        const res = await req.json();
+        const res = await req.json()
 
         //Mensagem do sistema ao enviar pedido
-        this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`;
-        this.color = 'green';
+        this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`
+        this.color = 'green'
         this.icon = 'check'
         // this.color = this.status[this.background];
 
@@ -140,7 +143,7 @@ export default {
           this.msg = ''
         }, 3000)
       } catch (error) {
-        console.error("Houve um erro de busca", error);
+        console.error('Houve um erro de busca', error)
       }
     },
     popUp(observacoes) {
@@ -221,7 +224,6 @@ export default {
   padding: 12px;
   border-bottom: 3px solid var(--background-cinza);
 }
-
 
 select {
   cursor: pointer;

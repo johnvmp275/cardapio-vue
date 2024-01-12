@@ -1,6 +1,7 @@
 <script setup>
 import MassageNot from './Notificacao.vue'
 import Loader from './Loader.vue'
+import Pagination from './Pagination.vue'
 </script>
 
 <template>
@@ -20,7 +21,12 @@ import Loader from './Loader.vue'
             <option value="acompanhamentos">Acompanhamento</option>
             <option value="opcionais">Complemento</option>
           </select>
-          <select name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina" @change="numerosPagina">
+          <select
+            name="itensPorPagina"
+            id="itensPorPagina"
+            v-model="itensPorPagina"
+            @change="numerosPagina"
+          >
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="6" selected>6</option>
@@ -33,20 +39,18 @@ import Loader from './Loader.vue'
             <p>{{ comida.tipo }}</p>
             <button @click="deleteProduto(comida.id)" class="btn-produto">Remover</button>
           </div>
-          <p class="aviso-sem-estoque" v-if="!itensCategoria.length">Não há itens nesta categoria.</p>
+          <p class="aviso-sem-estoque" v-if="!itensCategoria.length">
+            Não há itens nesta categoria.
+          </p>
         </div>
       </div>
-      <section class="pagination-section">
-        <div class="pagination">
-          <button @click="paginaAnterior" :disabled="paginaAtual === 1">
-            <span class="material-symbols-outlined"> arrow_back_ios </span>
-          </button>
-          <span>Página {{ paginaAtual }} de {{ totalPages }}</span>
-          <button @click="proximaPagina" :disabled="paginaAtual === totalPages">
-            <span class="material-symbols-outlined"> arrow_forward_ios </span>
-          </button>
-        </div>
-      </section>
+      <Pagination
+        :paginaAtual="paginaAtual"
+        :totalPages="totalPages"
+        :itensCategoria="itensCategoria"
+        :getDados="getDados"
+        @paginaMudada="atualizarPagina"
+      />
     </div>
   </div>
 </template>
@@ -58,7 +62,7 @@ export default {
     boolProp: {
       type: Boolean,
       required: true
-    }
+    },
   },
   data() {
     return {
@@ -71,7 +75,7 @@ export default {
       listKey: 0,
       isLoader: false,
       itensPorPagina: 6,
-      paginaAtual: 1,
+      paginaAtual: 1
     }
   },
   computed: {
@@ -80,12 +84,12 @@ export default {
       return Math.ceil(allItems.length / this.itensPorPagina)
     },
     itensCategoria() {
-      const startIndex = (this.paginaAtual - 1) * this.itensPorPagina;
-      const endIndex = startIndex + parseInt(this.itensPorPagina);
-      const allItems = this[this.categoria] || [];
+      const startIndex = (this.paginaAtual - 1) * this.itensPorPagina
+      const endIndex = startIndex + parseInt(this.itensPorPagina)
+      const allItems = this[this.categoria] || []
 
-      return allItems.slice(startIndex, endIndex);
-    },
+      return allItems.slice(startIndex, endIndex)
+    }
   },
   methods: {
     async getDados() {
@@ -102,63 +106,60 @@ export default {
         this.opcionais = data.opcionais || []
 
         this.itensCategoria = this[this.categoria]
-
-        this.isLoader = true
       } catch (error) {
         console.error('Houve um erro de busca', error)
       }
+      this.isLoader = true
     },
     async deleteProduto(id) {
       try {
-        const dadosString = JSON.parse(JSON.stringify(this.dados)); // Criar uma cópia profunda dos dados
-        const index = dadosString[this.categoria];
+        const dadosString = JSON.parse(JSON.stringify(this.dados)) // Criar uma cópia profunda dos dados
+        const index = dadosString[this.categoria]
 
-        const itemId = index.findIndex((item) => item.id === id);
+        const itemId = index.findIndex((item) => item.id === id)
 
         if (itemId !== -1) {
           // Remover localmente
-          const removedItem = index.splice(itemId, 1)[0];
-
+          const removedItem = index.splice(itemId, 1)[0]
 
           // Enviar a requisição PUT para o servidor
           const req = await fetch('http://localhost:3000/ingredientes', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dadosString),
-          });
+            body: JSON.stringify(dadosString)
+          })
 
           if (req.ok) {
-            this.msg = `O Produto N° ${id} foi removido!`;
+            this.msg = `O Produto N° ${id} foi removido!`
 
             setTimeout(() => {
-              this.msg = '';
-            }, 3000);
+              this.msg = ''
+            }, 3000)
 
-            this.getDados();
-            this.updateList = !this.updateList;
-            this.listKey += 1;
-
+            this.getDados()
+            this.updateList = !this.updateList
+            this.listKey += 1
           } else {
             // Se houver um erro, reverta a remoção local
-            index.splice(itemId, 0, removedItem);
-            throw new Error('Falha ao atualizar os dados no servidor');
+            index.splice(itemId, 0, removedItem)
+            throw new Error('Falha ao atualizar os dados no servidor')
           }
         } else {
-          console.error('Item não encontrado');
+          console.error('Item não encontrado')
         }
       } catch (error) {
-        console.error('Houve um erro durante a exclusão do produto', error);
+        console.error('Houve um erro durante a exclusão do produto', error)
       }
     },
 
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
       this.itensCategoria = this[this.categoria]
-      this.paginaAtual = 1;
+      this.paginaAtual = 1
     },
     numerosPagina() {
       this.paginaAtual = 1
-      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString());
+      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString())
     },
     carregarConfiguracoes() {
       const itensPorPaginaSalvos = localStorage.getItem('itensPorPagina')
@@ -166,21 +167,9 @@ export default {
         this.itensPorPagina = parseInt(itensPorPaginaSalvos)
       }
     },
-    irParaPagina(pageNumber) {
-      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-        this.paginaAtual = pageNumber
-      }
-    },
-    paginaAnterior() {
-      if (this.paginaAtual > 1) {
-        this.paginaAtual--
-      }
-    },
-    proximaPagina() {
-      if (this.paginaAtual < this.totalPages) {
-        this.paginaAtual++
-      }
-    },
+    atualizarPagina(novaPagina) {
+      this.paginaAtual = novaPagina
+    }
   },
   mounted() {
     this.getDados()
@@ -229,7 +218,6 @@ export default {
   font-weight: bold;
 }
 
-
 .btn-produto {
   cursor: pointer;
   width: 100%;
@@ -264,7 +252,6 @@ h2 {
   font-weight: bold;
   margin-bottom: 2rem;
 }
-
 
 #tabela-rows {
   display: flex;
@@ -323,28 +310,5 @@ h2 {
 .aviso-sem-estoque::after {
   content: ':(';
   margin-left: 10px;
-}
-
-.pagination-section {
-  margin-top: 20px;
-  display: flex;
-  justify-content: end;
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.pagination button {
-  cursor: pointer;
-  width: 36px;
-  background: var(--background-laranja);
-  border: none;
-  display: flex;
-  padding: 6px;
-  text-align: center;
-  color: var(--background-branco);
 }
 </style>

@@ -12,7 +12,14 @@ import Loader from './Loader.vue'
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
+          <input
+            type="text"
+            name="nome"
+            id="nome"
+            v-model="nome"
+            placeholder="Nome do Cliente"
+            required
+          />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
@@ -28,7 +35,11 @@ import Loader from './Loader.vue'
           <label for="acompanhamento">Acompanhamentos:</label>
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
-            <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
+            <option
+              v-for="acompanhamento in acompanhamentos"
+              :key="acompanhamento.id"
+              :value="acompanhamento.tipo"
+            >
               {{ acompanhamento.tipo }}
             </option>
           </select>
@@ -79,11 +90,10 @@ export default {
         this.comidas = data.comidas
         this.acompanhamentos = data.acompanhamentos
         this.opcionaisData = data.opcionais
-
-        this.isLoader = true
       } catch (error) {
         console.error('Houve um erro de busca', error)
       }
+      this.isLoader = true
     },
 
     async criarPedido(e) {
