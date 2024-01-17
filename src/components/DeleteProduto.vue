@@ -21,12 +21,7 @@ import Pagination from './Pagination.vue'
             <option value="acompanhamentos">Acompanhamento</option>
             <option value="opcionais">Complemento</option>
           </select>
-          <select
-            name="itensPorPagina"
-            id="itensPorPagina"
-            v-model="itensPorPagina"
-            @change="numerosPagina"
-          >
+          <select name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina" @change="numerosPagina">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="6" selected>6</option>
@@ -44,13 +39,8 @@ import Pagination from './Pagination.vue'
           </p>
         </div>
       </div>
-      <Pagination
-        :paginaAtual="paginaAtual"
-        :totalPages="totalPages"
-        :itensCategoria="itensCategoria"
-        :getDados="getDados"
-        @paginaMudada="atualizarPagina"
-      />
+      <Pagination :paginaAtual="paginaAtual" :totalPages="totalPages" :itensCategoria="itensCategoria"
+        :getDados="getDados" @paginaMudada="atualizarPagina" />
     </div>
   </div>
 </template>
@@ -63,19 +53,34 @@ export default {
       type: Boolean,
       required: true
     },
+    getDados: {
+      type: Function,
+      required: true
+    },
+    deleteProduto: {
+      type: Function,
+      required: true
+    },
+    comidas: {
+      type: Array,
+    },
+    acompanhamentos: {
+      type: Array,
+    },
+    opcionais: {
+      type: Array,
+    },
   },
+
   data() {
     return {
-      categoria: 'comidas',
       msg: null,
-      comidas: [],
-      acompanhamentos: [],
-      opcionais: [],
+      categoria: 'comidas',
+      itensPorPagina: 6,
+      paginaAtual: 1,
       updateList: true,
       listKey: 0,
       isLoader: false,
-      itensPorPagina: 6,
-      paginaAtual: 1
     }
   },
   computed: {
@@ -92,66 +97,6 @@ export default {
     }
   },
   methods: {
-    async getDados() {
-      try {
-        const req = await fetch('http://localhost:3000/ingredientes')
-        const data = await req.json()
-
-        this.totalItens = data.total || 0
-
-        this.dados = data
-
-        this.comidas = data.comidas || []
-        this.acompanhamentos = data.acompanhamentos || []
-        this.opcionais = data.opcionais || []
-
-        this.itensCategoria = this[this.categoria]
-      } catch (error) {
-        console.error('Houve um erro de busca', error)
-      }
-      this.isLoader = true
-    },
-    async deleteProduto(id) {
-      try {
-        const dadosString = JSON.parse(JSON.stringify(this.dados)) // Criar uma cópia profunda dos dados
-        const index = dadosString[this.categoria]
-
-        const itemId = index.findIndex((item) => item.id === id)
-
-        if (itemId !== -1) {
-          // Remover localmente
-          const removedItem = index.splice(itemId, 1)[0]
-
-          // Enviar a requisição PUT para o servidor
-          const req = await fetch('http://localhost:3000/ingredientes', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dadosString)
-          })
-
-          if (req.ok) {
-            this.msg = `O Produto N° ${id} foi removido!`
-
-            setTimeout(() => {
-              this.msg = ''
-            }, 3000)
-
-            this.getDados()
-            this.updateList = !this.updateList
-            this.listKey += 1
-          } else {
-            // Se houver um erro, reverta a remoção local
-            index.splice(itemId, 0, removedItem)
-            throw new Error('Falha ao atualizar os dados no servidor')
-          }
-        } else {
-          console.error('Item não encontrado')
-        }
-      } catch (error) {
-        console.error('Houve um erro durante a exclusão do produto', error)
-      }
-    },
-
     atualizarCategoria() {
       // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
       this.itensCategoria = this[this.categoria]
@@ -169,10 +114,14 @@ export default {
     },
     atualizarPagina(novaPagina) {
       this.paginaAtual = novaPagina
+    },
+    async carregarDados() {
+      await this.getDados();
+      this.isLoader = true
     }
   },
   mounted() {
-    this.getDados()
+    this.carregarDados();
     this.carregarConfiguracoes()
   }
 }

@@ -19,7 +19,7 @@ import DeleteProduto from './DeleteProduto.vue'
         <div id="tabela-rows">
           <div class="tabela-row">
             <input type="text" placeholder="insira o titulo" v-model="tipo" required />
-            <select name="categoria" id="categoria" v-model="categoria" required>
+            <select name="categorias" id="categorias" v-model="categorias" required>
               <option value="null">Tipo de prato</option>
               <option value="comidas">Principal</option>
               <option value="acompanhamentos">Acompanhamento</option>
@@ -31,7 +31,15 @@ import DeleteProduto from './DeleteProduto.vue'
       </div>
     </div>
   </div>
-  <DeleteProduto :update="update" :key="updateKey" />
+  <DeleteProduto
+  :getDados="getDados"
+  :categoria="categoria"
+  :comidas="comidas"
+  :acompanhamentos="acompanhamentos"
+  :opcionais="opcionais"
+  :deleteProduto="deleteProduto"
+/>
+
 </template>
 
 <script>
@@ -42,10 +50,14 @@ export default {
       nome: null,
       tipo: null,
       dados: {},
-      categoria: null,
+      categorias: null,
       update: true,
       updateKey: 0,
-      msg: null
+      msg: null,
+      comidas: [],
+      acompanhamentos: [],
+      opcionais: [],
+      categoria: 'comidas',
     }
   },
   methods: {
@@ -72,8 +84,8 @@ export default {
         const dadosString = JSON.stringify(this.dados)
         const dataObj = JSON.parse(dadosString)
 
-        const index = dataObj[this.categoria].length + 1
-        dataObj[this.categoria].push({
+        const index = dataObj[this.categorias].length + 1
+        dataObj[this.categorias].push({
           id: index,
           tipo: this.tipo
         })
@@ -103,12 +115,52 @@ export default {
         }, 3000)
 
         // Limpar campos ao enviar
-        this.categoria = 'null'
+        this.categorias = 'null'
         this.tipo = ''
 
         this.getDados()
+
       } catch (error) {
         console.error("Houve um erro ao criar o produto", error);
+      }
+    },
+    async deleteProduto(id) {
+      try {
+        const dadosString = JSON.parse(JSON.stringify(this.dados)) // Criar uma cópia profunda dos dados
+        const index = dadosString[this.categoria]
+
+        const itemId = index.findIndex((item) => item.id === id)
+
+        if (itemId !== -1) {
+          // Remover localmente
+          const removedItem = index.splice(itemId, 1)[0]
+
+          // Enviar a requisição PUT para o servidor
+          const req = await fetch('http://localhost:3000/ingredientes', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosString)
+          })
+
+          if (req.ok) {
+            this.msg = `O Produto N° ${id} foi removido!`
+
+            setTimeout(() => {
+              this.msg = ''
+            }, 3000)
+
+            this.getDados()
+
+          } else {
+            // Se houver um erro, reverta a remoção local
+            index.splice(itemId, 0, removedItem)
+            throw new Error('Falha ao atualizar os dados no servidor')
+          }
+        } else {
+          console.error('Item não encontrado')
+        }
+      } catch (error) {
+        console.error('Houve um erro durante a exclusão do produto', error)
       }
     },
   },
