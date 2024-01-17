@@ -7,7 +7,7 @@ import DeleteProduto from './DeleteProduto.vue'
   <h1>Menu Personalizado: Sua Cozinha, Suas Regras!</h1>
   <div>
     <div class="tabela-scroll">
-      <MassageNot :msg="msg" v-show="msg" />
+      <MassageNot :msg="msg" v-show="msg"/>
       <div id="tabela-pedido">
         <div>
           <div class="tabela-topo">
@@ -38,6 +38,7 @@ import DeleteProduto from './DeleteProduto.vue'
   :acompanhamentos="acompanhamentos"
   :opcionais="opcionais"
   :deleteProduto="deleteProduto"
+  :dados="dados"
 />
 
 </template>
@@ -57,7 +58,6 @@ export default {
       comidas: [],
       acompanhamentos: [],
       opcionais: [],
-      categoria: 'comidas',
     }
   },
   methods: {
@@ -122,45 +122,6 @@ export default {
 
       } catch (error) {
         console.error("Houve um erro ao criar o produto", error);
-      }
-    },
-    async deleteProduto(id) {
-      try {
-        const dadosString = JSON.parse(JSON.stringify(this.dados)) // Criar uma cópia profunda dos dados
-        const index = dadosString[this.categoria]
-
-        const itemId = index.findIndex((item) => item.id === id)
-
-        if (itemId !== -1) {
-          // Remover localmente
-          const removedItem = index.splice(itemId, 1)[0]
-
-          // Enviar a requisição PUT para o servidor
-          const req = await fetch('http://localhost:3000/ingredientes', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dadosString)
-          })
-
-          if (req.ok) {
-            this.msg = `O Produto N° ${id} foi removido!`
-
-            setTimeout(() => {
-              this.msg = ''
-            }, 3000)
-
-            this.getDados()
-
-          } else {
-            // Se houver um erro, reverta a remoção local
-            index.splice(itemId, 0, removedItem)
-            throw new Error('Falha ao atualizar os dados no servidor')
-          }
-        } else {
-          console.error('Item não encontrado')
-        }
-      } catch (error) {
-        console.error('Houve um erro durante a exclusão do produto', error)
       }
     },
   },
