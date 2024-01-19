@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouterLink } from 'vue-router'
 import CardapioView from '../views/CardapioView.vue'
 import PedidosView from '../views/PedidosView.vue'
 import ConfigView from '../views/ConfigView.vue'
+import LoginView from '../views/LoginView.vue'
 import NotFound from '../views/NotFound.vue'
 
 const router = createRouter({
@@ -10,7 +11,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: CardapioView
+      component: CardapioView,
     },
     {
       path: '/pedidos',
@@ -25,11 +26,34 @@ const router = createRouter({
       // component: () => import('../views/CardapioView.vue')
     },
     {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+      // component: () => import('../views/CardapioView.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: NotFound
     },
   ]
 })
+
+const isLogged = localStorage.getItem('isLogged') === 'true';
+// Adicionando lógica de verificação de login
+router.beforeEach((to, from, next) => {
+  // Verificar o estado de login a partir do localStorage
+  const isLogged = localStorage.getItem('isLogged') === 'true';
+
+  // Se o usuário não estiver autenticado e está tentando acessar uma rota protegida, redirecione para a página de login
+  if (!isLogged && to.name !== 'login') {
+    next('/login');
+  } else if (isLogged && to.name === 'login') {
+    next('/'); 
+  } else {
+    next();
+  }
+});
+
 
 export default router

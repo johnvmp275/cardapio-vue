@@ -8,6 +8,12 @@ import Navbar from './components/Navbar.vue'
   <RouterView />
 </template>
 
-<style scoped>
+<script>
+// export default {
+//   mounted:{
+  
+//   }
+// }
+</script>
 
-</style>
+<style scoped></style>

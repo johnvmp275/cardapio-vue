@@ -169,7 +169,7 @@ export default {
 
         //Mensagem do sistema ao enviar pedido
         this.notificacoes.push({
-          msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`,
+          msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status}!`,
           icon: 'check',
           color: `${this.color}`
         });
@@ -310,11 +310,4 @@ select {
   margin-left: 10px;
 }
 
-.btn-observacao {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  width: 50px;
-  margin: 0 auto;
-}
 </style>

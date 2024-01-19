@@ -1,13 +1,20 @@
 <template>
   <div>
     <div class="teste">
-      <div class="notificacao-container" v-for="(notification, index) in notifications" :key="index">
+      <div
+        class="notificacao-container"
+        v-for="(notification, index) in notifications"
+        :key="index"
+      >
         <span class="material-symbols-outlined" :style="{ background: notification.color }">
           {{ notification.icon }}
         </span>
         <p>
           {{ notification.msg }}
         </p>
+        <!-- <button @click="closeNotification">
+          <span class="material-symbols-outlined"> cancel </span>
+        </button> -->
       </div>
     </div>
   </div>
@@ -17,7 +24,12 @@
 export default {
   props: {
     notifications: Array
-  }
+  },
+  // methods: {
+  //   closeNotification() {
+  //     this.notifications = []
+  //   }
+  // }
 }
 </script>
 
@@ -28,7 +40,7 @@ export default {
   right: 10px;
   display: flex;
   flex-direction: column-reverse;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .notificacao-container {
@@ -84,14 +96,18 @@ button {
 }
 
 button span {
-  font-size: 28px;
+  color: black;
+  font-size: 25px;
 }
 
 @keyframes showMessage {
   from {
-    margin-top: -50px;
+    opacity: 0;
+    margin-top: -100px;
   }
 
-  to {}
+  to {
+    opacity: 1;
+  }
 }
 </style>
