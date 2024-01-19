@@ -12,27 +12,28 @@ export default {
   methods: {
     login() {
       //Autentica o usuário e define o isLogged como true no localStorage
-      this.authenticateUser()
-
-      // Após autenticação, você pode redirecionar o usuário para a página desejada
-      this.$router.push('/')
-    },
-    authenticateUser() {
       localStorage.setItem('isLogged', 'true')
+      
+      // Emite o evento para notificar outros componentes sobre a atualização
+      emitLoginStatus()
+      
+      // Após autenticação, o usuário é redirecionado para home
+      this.$router.push('/')
     }
   }
 }
 </script>
 
 <style scoped>
-
-div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
-.btn-login{
-    width: 100%;
-    max-width: 250px
+.btn-login {
+  width: 100%;
+  max-width: 250px;
 }
 </style>

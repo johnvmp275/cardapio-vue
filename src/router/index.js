@@ -39,13 +39,13 @@ const router = createRouter({
   ]
 })
 
-const isLogged = localStorage.getItem('isLogged') === 'true';
 // Adicionando lógica de verificação de login
 router.beforeEach((to, from, next) => {
-  // Verificar o estado de login a partir do localStorage
+
+  // Verifica o estado de login a partir do localStorage
   const isLogged = localStorage.getItem('isLogged') === 'true';
 
-  // Se o usuário não estiver autenticado e está tentando acessar uma rota protegida, redirecione para a página de login
+  // Se o usuário não estiver autenticado é redirecionado para a página de login
   if (!isLogged && to.name !== 'login') {
     next('/login');
   } else if (isLogged && to.name === 'login') {
