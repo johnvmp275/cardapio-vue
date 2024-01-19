@@ -1,19 +1,20 @@
 <script setup>
-import MassageNot from './Notificacao.vue'
+import MassageNot from './widgets/Notificacao.vue'
+import Button from './widgets/Button.vue'
 import DeleteProduto from './DeleteProduto.vue'
 </script>
 
 <template>
+  <MassageNot :notifications="notificacoes" />
   <h1>Menu Personalizado: Sua Cozinha, Suas Regras!</h1>
   <div>
     <div class="tabela-scroll">
-      <MassageNot :msg="msg" v-show="msg"/>
       <div id="tabela-pedido">
         <div>
           <div class="tabela-topo">
-            <div>Titulo do prato:</div>
-            <div>Categoria:</div>
-            <div>Criar:</div>
+            <strong>Titulo do prato:</strong>
+            <strong>Categoria:</strong>
+            <strong>Criar:</strong>
           </div>
         </div>
         <div id="tabela-rows">
@@ -25,7 +26,7 @@ import DeleteProduto from './DeleteProduto.vue'
               <option value="acompanhamentos">Acompanhamento</option>
               <option value="opcionais">Complemento</option>
             </select>
-            <button @click="criarProduto" class="btn-produto">Criar</button>
+            <Button @click="criarProduto" class="btn-produto" :btnLoader="btnLoader">Criar</Button>
           </div>
         </div>
       </div>
@@ -54,10 +55,11 @@ export default {
       categorias: null,
       update: true,
       updateKey: 0,
-      msg: null,
+      notificacoes: [],
       comidas: [],
       acompanhamentos: [],
       opcionais: [],
+      btnLoader: false
     }
   },
   methods: {
@@ -81,17 +83,21 @@ export default {
     },
     async criarProduto() {
       try {
+        if (this.tipo !== null && this.categorias !== null){
+        
+        this.btnLoader = true
+
         const dadosString = JSON.stringify(this.dados)
         const dataObj = JSON.parse(dadosString)
-
+        
         const index = dataObj[this.categorias].length + 1
         dataObj[this.categorias].push({
           id: index,
           tipo: this.tipo
         })
-
+        
         const dataJson = JSON.stringify(dataObj)
-
+        
         const req = await fetch('http://localhost:3000/ingredientes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -107,21 +113,47 @@ export default {
         this.update = !this.update;
         this.updateKey += 1;
 
-        this.msg = `O Produto: ${this.tipo} acabou de ser criado!`;
+        this.notificacoes.push({
+          msg:`O Produto: ${this.tipo} acabou de ser criado!`,
+          icon: 'check',
+          color: 'green'
+        });
 
-        // Limpar mensagem após enviar
-        setTimeout(() => {
-          this.msg = ''
-        }, 3000)
+        //Limpar mensagem após enviar
+       setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
 
         // Limpar campos ao enviar
-        this.categorias = 'null'
-        this.tipo = ''
+        this.categorias = null
+        this.tipo = null
+        this.btnLoader = false
 
         this.getDados()
+       } else {
+        this.notificacoes.push({
+          msg:`Por favor preencha os dados`,
+          icon: 'warning',
+          color: 'red'
+        });
+
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
+       }
 
       } catch (error) {
         console.error("Houve um erro ao criar o produto", error);
+
+        this.notificacoes.push({
+          msg:`Houve um erro ao criar o Produto :(`,
+          icon: 'warning',
+          color: 'red'
+        });
+
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
       }
     },
   },

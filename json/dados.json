@@ -78,26 +78,22 @@
   "status": [
     {
       "id": 1,
-      "tipo": "Solicitado",
-      "background": "green"
+      "tipo": "Solicitado"
     },
     {
       "id": 2,
-      "tipo": "Em produção",
-      "background": "green"
+      "tipo": "Em produção"
     },
     {
       "id": 3,
-      "tipo": "Finalizado",
-      "background": "green"
+      "tipo": "Finalizado"
     }
   ],
   "pedidos": [
     {
       "nome": "Tharles Moreto",
-      "observacoes": "O cliente está em epoca de comemoração, não está tão apressado por assim e está pedindo algumas coisas antes de chegar o seu pedido.",
       "comida": "King-Crab",
-      "acompanhamento": "Porção batata frita",
+      "acompanhamento": "Molho de Churrasco",
       "opcionais": [
         "Coca-Cola 2L",
         "Suco de Laranja 800ml"

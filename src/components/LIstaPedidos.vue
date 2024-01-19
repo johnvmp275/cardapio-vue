@@ -1,25 +1,20 @@
 <script setup>
-import MassageNot from './Notificacao.vue'
-import Loader from './Loader.vue'
+import MassageNot from './widgets/Notificacao.vue'
+import Loader from './widgets/Loader.vue'
+import Button from './widgets/Button.vue';
 </script>
 
 <template>
+  <MassageNot :notifications="notificacoes" />
   <Loader :isLoader="isLoader" />
   <div>
     <h1>Comandas e Pedidos:</h1>
     <section class="pedidosForm">
-      <form id="pedido-formulario" method="POST" @submit="criarPedido">
+      <div class="pedidos-container">
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input
-            type="text"
-            name="nome"
-            id="nome"
-            v-model="nome"
-            placeholder="Nome do Cliente"
-            required
-          />
+          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
@@ -31,15 +26,11 @@ import Loader from './Loader.vue'
             </option>
           </select>
         </div>
-        <div class="opcoes-container">
+        <div class="cardapio-container">
           <label for="acompanhamento">Acompanhamentos:</label>
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
-            <option
-              v-for="acompanhamento in acompanhamentos"
-              :key="acompanhamento.id"
-              :value="acompanhamento.tipo"
-            >
+            <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
               {{ acompanhamento.tipo }}
             </option>
           </select>
@@ -56,11 +47,10 @@ import Loader from './Loader.vue'
         </div>
         <!-- input para postar o peidido para aba de pedidos -->
         <div class="button-submit">
-          <input class="btn-submit" type="submit" value="Postar" />
+          <Button class="btn-submit" @click="criarPedido" :btnLoader="btnLoader">Postar</Button>
         </div>
-      </form>
+      </div>
     </section>
-    <MassageNot :msg="msg" :icon="icon" v-show="msg" />
   </div>
 </template>
 
@@ -77,8 +67,9 @@ export default {
       comida: null,
       acompanhamento: null,
       opcionais: [],
-      msg: null,
-      icon: null
+      notificacoes: [],
+      icon: null,
+      btnLoader: false
     }
   },
   methods: {
@@ -96,46 +87,75 @@ export default {
       this.isLoader = true
     },
 
-    async criarPedido(e) {
+    async criarPedido() {
       try {
-        e.preventDefault()
+        if (this.nome !== null && this.comida !== null) {
+          
+          this.btnLoader = true
 
-        const data = {
-          nome: this.nome,
-          comida: this.comida,
-          acompanhamento: this.acompanhamento,
-          opcionais: Array.from(this.opcionais),
-          status: 'Solicitado'
+          const data = {
+            nome: this.nome,
+            comida: this.comida,
+            acompanhamento: this.acompanhamento,
+            opcionais: Array.from(this.opcionais),
+            status: 'Solicitado'
+          }
+          const dataJson = JSON.stringify(data)
+
+          const req = await fetch('http://localhost:3000/pedidos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: dataJson
+          })
+
+          const res = await req.json()
+
+          //Mensagem do sistema ao enviar pedido
+          this.notificacoes.push({
+            msg: `O Pedido N° ${res.id} foi enviado com sucesso!`,
+            icon: 'check',
+            color: 'green'
+          });
+
+          
+          //Limpar mensagem após enviar
+          setTimeout(() => {
+            this.notificacoes.splice(0, 1);
+          }, 4000);
+          
+          //Limpar campos ao enviar
+          this.nome = null
+          this.comida = null
+          this.acompanhamento = null
+          // this.opcionais = ''
+
+          this.btnLoader = false
+        } else {
+          this.notificacoes.push({
+            msg: `Por favor preencha os dados`,
+            icon: 'warning',
+            color: 'red'
+          });
+
+          setTimeout(() => {
+            this.notificacoes.splice(0, 1);
+          }, 4000);
         }
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
 
-        const dataJson = JSON.stringify(data)
-
-        const req = await fetch('http://localhost:3000/pedidos', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: dataJson
-        })
-
-        const res = await req.json()
-
-        //Mensagem do sistema ao enviar pedido
-        this.msg = `O Pedido N° ${res.id} foi enviado com sucesso!`
-        this.icon = 'check'
+        this.notificacoes.push({
+          msg: `Houve um erro ao criar o Pedido :(`,
+          icon: 'warning',
+          color: 'red'
+        });
 
         //Limpar mensagem após enviar
         setTimeout(() => {
-          this.msg = ''
-        }, 3000)
-
-        //Limpar campos ao enviar
-        this.nome = ''
-        this.comida = 'null'
-        this.acompanhamento = 'null'
-        // this.opcionais = ''
-      } catch (error) {
-        console.error('Houve um erro de busca', error)
+          this.notificacoes.splice(0, 1);
+        }, 4000);
       }
-    }
+    },
   },
   mounted() {
     this.getDados()
@@ -149,7 +169,7 @@ export default {
   justify-content: center;
 }
 
-form {
+.pedidos-container {
   background: var(--background-cinza);
   display: flex;
   flex-direction: column;
@@ -227,6 +247,7 @@ select {
 .btn-submit {
   cursor: pointer;
   margin-top: 20px;
+  width: 100%;
   color: var(--background-branco);
   background: var(--background-laranja);
   padding: 16px;

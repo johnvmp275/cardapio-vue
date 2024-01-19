@@ -50,7 +50,6 @@ export default {
 
 <style scoped>
 .pagination-section {
-  border-top: 3px solid var(--background-cinza);
   margin-top: 20px;
   display: flex;
   justify-content: end;

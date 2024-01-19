@@ -1,23 +1,24 @@
 <script setup>
-import MassageNot from './Notificacao.vue'
-import Loader from './Loader.vue'
+import MassageNot from './widgets/Notificacao.vue'
+import Loader from './widgets/Loader.vue'
+import Button from './widgets/Button.vue'
 </script>
 
 <template>
   <Loader :isLoader="isLoader" />
+  <MassageNot :notifications="notificacoes" />
   <div>
     <h1>Gerencie o Fluxo de Pedidos:</h1>
     <div class="tabela-scroll">
-      <MassageNot :msg="msg" :icon="icon" v-show="msg" @click="Close()" />
       <div id="tabela-pedido">
         <div>
           <div class="tabela-topo">
-            <div class="order-id">#:</div>
-            <div>Cliente:</div>
-            <div>Pedido:</div>
-            <div>Acompanhamento:</div>
-            <div>Complementos:</div>
-            <div>Status:</div>
+            <strong class="order-id">#:</strong>
+            <strong>Cliente:</strong>
+            <strong>Pedido:</strong>
+            <strong>Acompanhamento:</strong>
+            <strong>Complementos:</strong>
+            <strong>Status:</strong>
           </div>
         </div>
         <div id="tabela-rows">
@@ -39,16 +40,11 @@ import Loader from './Loader.vue'
             <div class="status-pedido">
               <select name="status" id="status" @change="updateStatus($event, pedido.id)">
                 <option value="Aguardando...">Aguardando..</option>
-                <option
-                  v-for="s in status"
-                  :key="s.id"
-                  :value="s.tipo"
-                  :selected="pedido.status == s.tipo"
-                >
+                <option v-for="s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
                   {{ s.tipo }}
                 </option>
               </select>
-              <button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</button>
+              <Button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</Button>
             </div>
           </div>
         </div>
@@ -58,6 +54,14 @@ import Loader from './Loader.vue'
 </template>
 
 <script>
+//Objeto que mapeia tipos de status para cores
+const statusColors = {
+  'Solicitado': 'blue',
+  'Em produção': 'purple',
+  'Finalizado': 'green',
+  'Aguardando...' : 'orange'
+};
+
 export default {
   name: 'Pedidos',
   data() {
@@ -67,7 +71,7 @@ export default {
       pedidosId: null,
       status: [],
       isLoader: false,
-      msg: null
+      notificacoes: [],
     }
   },
   methods: {
@@ -102,18 +106,30 @@ export default {
         const res = await req.json()
 
         //Mensagem do sistema ao enviar pedido
-        this.msg = `O Pedido N° ${id} foi removido!`
-        this.color = 'red'
-        this.icon = 'warning'
+        this.notificacoes.push({
+          msg: `O Pedido N° ${id} foi removido!`,
+          icon: 'warning',
+          color: 'red'
+        });
 
         //Limpar mensagem após enviar
         setTimeout(() => {
-          this.msg = ''
-        }, 3000)
+          this.notificacoes.splice(0, 1);
+        }, 4000);
 
         this.getPedidos()
       } catch (error) {
         console.error('Houve um erro de busca', error)
+
+        this.notificacoes.push({
+          msg: `Houve um erro ao deletar o Produto :(`,
+          icon: 'warning',
+          color: 'red'
+        });
+
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
       }
     },
     async updateStatus(event, id) {
@@ -130,25 +146,53 @@ export default {
 
         const res = await req.json()
 
-        //Mensagem do sistema ao enviar pedido
-        this.msg = `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`
-        this.color = 'green'
-        this.icon = 'check'
-        // this.color = this.status[this.background];
+        const selectedStatus = event.target.value;
 
-        // console.log(this.color);
+        //Troca cor dos status de acordo com seu valor
+        switch (selectedStatus) {
+          case 'Solicitado':
+            this.color = statusColors['Solicitado'];
+            break;
+          case 'Em produção':
+            this.color = statusColors['Em produção'];
+            break;
+          case 'Finalizado':
+            this.color = statusColors['Finalizado'];
+            break;
+          case 'Aguardando...':
+            this.color = statusColors['Aguardando...'];
+            break;
+
+          default:
+            this.color = 'green';
+        }
+
+        //Mensagem do sistema ao enviar pedido
+        this.notificacoes.push({
+          msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status} !`,
+          icon: 'check',
+          color: `${this.color}`
+        });
 
         //Limpar mensagem após enviar
         setTimeout(() => {
-          this.msg = ''
-        }, 3000)
+          this.notificacoes.splice(0, 1);
+        }, 4000);
+
       } catch (error) {
         console.error('Houve um erro de busca', error)
+
+        this.notificacoes.push({
+          msg: `Houve um erro ao atualizar os Status :(`,
+          icon: 'warning',
+          color: 'red'
+        });
+
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
       }
     },
-    Close() {
-      // this.msg = ''
-    }
   },
   mounted() {
     this.getPedidos()
@@ -172,7 +216,7 @@ export default {
 }
 
 #tabela-pedido {
-  min-width: 1330px;
+  min-width: 1298px;
 }
 
 #tabela-rows {
@@ -195,10 +239,9 @@ export default {
   border-bottom: 3px solid var(--background-cinza);
 }
 
-.tabela-topo div {
+.tabela-topo strong {
   width: 100%;
   display: flex;
-  font-weight: bold;
 }
 
 .tabela-topo div,
@@ -252,10 +295,6 @@ select {
 
 .tabela-row ul::-webkit-scrollbar-thumb {
   background: var(--background-cinza);
-}
-
-.notificacao-container {
-  background: v-bind(color);
 }
 
 .aviso-sem-estoque {

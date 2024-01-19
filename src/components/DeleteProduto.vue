@@ -1,7 +1,8 @@
 <script setup>
-import MassageNot from './Notificacao.vue'
-import Loader from './Loader.vue'
-import Pagination from './Pagination.vue'
+import MassageNot from './widgets/Notificacao.vue'
+import Loader from './widgets/Loader.vue'
+import Pagination from './widgets/Pagination.vue'
+import Button from './widgets/Button.vue'
 </script>
 
 <template>
@@ -10,37 +11,48 @@ import Pagination from './Pagination.vue'
   <div>
     <div class="tabela-scroll">
       <div class="mensagem">
-        <MassageNot :msg="msg" v-show="msg" />
+        <MassageNot :notifications="notificacoes" />
       </div>
       <div id="tabela-pedido">
         <div class="tabela-topo">
-          <div>#:</div>
-          <div>Titulo do prato:</div>
-          <select name="categoria" id="categoria" v-model="categoria" @change="atualizarCategoria">
-            <option value="comidas" selected>Principal</option>
-            <option value="acompanhamentos">Acompanhamento</option>
-            <option value="opcionais">Complemento</option>
-          </select>
-          <select name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina" @change="numerosPagina">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="6" selected>6</option>
-          </select>
-          <div>Editar:</div>
+          <strong>#:</strong>
+          <strong>Titulo do prato:</strong>
+          <div>
+            <strong>Categoria:</strong>
+            <select name="categoria" id="categoria" v-model="categoria" @change="atualizarCategoria">
+              <option value="comidas" selected>Principal</option>
+              <option value="acompanhamentos">Acompanhamento</option>
+              <option value="opcionais">Complemento</option>
+            </select>
+          </div>
+          <div>
+            <strong>Ordenação:</strong>
+            <select class="itensPorPagina" name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina"
+              @change="numerosPagina">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="6" selected>6</option>
+            </select>
+          </div>
+          <strong>Editar:</strong>
         </div>
         <div id="tabela-rows">
           <div class="tabela-row" v-for="comida in itensCategoria" :key="comida.id">
-            <div class="id-pedido">{{ comida.id }}</div>
-            <p>{{ comida.tipo }}</p>
-            <button @click="deleteProduto(comida.id)" class="btn-produto">Remover</button>
+            <p class="id-pedido">{{ comida.id }}</p>
+            <strong>{{ comida.tipo }}</strong>
+            <Button @click="deleteProduto(comida.id)" class="btn-produto">Remover</Button>
           </div>
           <p class="aviso-sem-estoque" v-if="!itensCategoria.length">
             Não há itens nesta categoria.
           </p>
         </div>
       </div>
-      <Pagination :paginaAtual="paginaAtual" :totalPages="totalPages" :itensCategoria="itensCategoria"
-        :getDados="getDados" @paginaMudada="atualizarPagina" />
+      <Pagination
+       :paginaAtual="paginaAtual" 
+       :totalPages="totalPages" 
+       :itensCategoria="itensCategoria"
+       :getDados="getDados" 
+       @paginaMudada="atualizarPagina" />
     </div>
   </div>
 </template>
@@ -77,7 +89,7 @@ export default {
 
   data() {
     return {
-      msg: null,
+      notificacoes: [],
       categoria: 'comidas',
       itensPorPagina: 6,
       paginaAtual: 1,
@@ -141,11 +153,15 @@ export default {
           })
 
           if (req.ok) {
-            this.msg = `O Produto N° ${id} foi removido!`
+            this.notificacoes.push({
+              msg: `O Produto N° ${id} foi removido!`,
+              icon: 'warning',
+              color: 'red'
+            });
 
             setTimeout(() => {
-              this.msg = ''
-            }, 3000)
+              this.notificacoes.splice(0, 1);
+            }, 4000);
 
             this.getDados()
 
@@ -159,6 +175,16 @@ export default {
         }
       } catch (error) {
         console.error('Houve um erro durante a exclusão do produto', error)
+
+        this.notificacoes.push({
+          msg: `Houve um erro ao deletar o Produto :(`,
+          icon: 'warning',
+          color: 'red'
+        });
+
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1);
+        }, 4000);
       }
     },
   },
@@ -206,7 +232,9 @@ export default {
 }
 
 .tabela-topo div {
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .btn-produto {
@@ -218,10 +246,6 @@ export default {
   padding: 12px 6px;
   border: none;
   font-weight: bold;
-}
-
-.notificacao-container {
-  background: red;
 }
 
 select {
@@ -286,10 +310,6 @@ h2 {
   grid-template-columns: 50px 4fr 1fr;
 }
 
-.tabela-row p {
-  font-weight: bold;
-}
-
 .aviso-sem-estoque {
   display: flex;
   justify-content: center;
@@ -301,5 +321,9 @@ h2 {
 .aviso-sem-estoque::after {
   content: ':(';
   margin-left: 10px;
+}
+
+.itensPorPagina {
+  width: 140px;
 }
 </style>
