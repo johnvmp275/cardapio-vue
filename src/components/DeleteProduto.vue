@@ -43,7 +43,7 @@ import Button from './widgets/Button.vue'
             <Button @click="deleteProduto(comida.id)" class="btn-produto">Remover</Button>
           </div>
           <p class="aviso-sem-estoque" v-if="!itensCategoria.length">
-            Não há itens nesta categoria.
+            Não há itens nesta categoria
           </p>
         </div>
       </div>
