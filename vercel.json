@@ -4,8 +4,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "scripts": {
-    "postinstall": "npm run backend"
-  }
+  ]
 }
