@@ -6,7 +6,7 @@ import DeleteProduto from './DeleteProduto.vue'
 
 <template>
   <MassageNot :notifications="notificacoes" />
-  <h1>Menu Personalizado: Sua Cozinha, Suas Regras!</h1>
+  <h1>Menu Personalizado</h1>
   <div>
     <div class="tabela-scroll">
       <div id="tabela-pedido">
@@ -19,9 +19,11 @@ import DeleteProduto from './DeleteProduto.vue'
         </div>
         <div id="tabela-rows">
           <div class="tabela-row">
-            <input type="text" placeholder="insira o titulo" v-model="tipo" required />
-            <select name="categorias" id="categorias" v-model="categorias" required>
-              <option value="null">Tipo de prato</option>
+            <input type="text" id="tipo" placeholder="insira o titulo" v-model="tipo" required
+              :class="{ 'invalid': Tipoinvalido }" />
+            <select name="categorias" id="categorias" v-model="categorias" required
+              :class="{ 'invalid': Categoriainvalida }">
+              <option value="null" style="display: none;">Tipo de prato</option>
               <option value="comidas">Principal</option>
               <option value="acompanhamentos">Acompanhamento</option>
               <option value="opcionais">Complemento</option>
@@ -32,16 +34,8 @@ import DeleteProduto from './DeleteProduto.vue'
       </div>
     </div>
   </div>
-  <DeleteProduto
-  :getDados="getDados"
-  :categoria="categoria"
-  :comidas="comidas"
-  :acompanhamentos="acompanhamentos"
-  :opcionais="opcionais"
-  :deleteProduto="deleteProduto"
-  :dados="dados"
-/>
-
+  <DeleteProduto :getDados="getDados" :categoria="categoria" :comidas="comidas" :acompanhamentos="acompanhamentos"
+    :opcionais="opcionais" :deleteProduto="deleteProduto" :dados="dados" />
 </template>
 
 <script>
@@ -50,7 +44,7 @@ export default {
   data() {
     return {
       nome: null,
-      tipo: null,
+      tipo: '',
       dados: {},
       categorias: null,
       update: true,
@@ -59,8 +53,14 @@ export default {
       comidas: [],
       acompanhamentos: [],
       opcionais: [],
-      btnLoader: false
+      btnLoader: false,
+      Tipoinvalido: false,
+      Categoriainvalida: false
     }
+  },
+  watch: {
+    tipo: 'validarCampos',
+    categorias: 'validarCampos'
   },
   methods: {
     async getDados() {
@@ -83,70 +83,77 @@ export default {
     },
     async criarProduto() {
       try {
-        if (this.tipo !== null && this.categorias !== null){
-        
-        this.btnLoader = true
+        if (this.tipo !== '' && this.categorias !== null) {
 
-        const dadosString = JSON.stringify(this.dados)
-        const dataObj = JSON.parse(dadosString)
-        
-        const index = dataObj[this.categorias].length + 1
-        dataObj[this.categorias].push({
-          id: index,
-          tipo: this.tipo
-        })
-        
-        const dataJson = JSON.stringify(dataObj)
-        
-        const req = await fetch('http://localhost:3000/ingredientes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: dataJson
-        })
+          this.btnLoader = true
 
-        const res = await req.json()
+          const dadosString = JSON.stringify(this.dados)
+          const dataObj = JSON.parse(dadosString)
 
-        // Atualize os dados localmente após criar um novo produto
-        this.dados = res;
+          const index = dataObj[this.categorias].length + 1
+          dataObj[this.categorias].push({
+            id: index,
+            tipo: this.tipo
+          })
 
-        // Mensagem do sistema ao enviar pedido
-        this.update = !this.update;
-        this.updateKey += 1;
+          const dataJson = JSON.stringify(dataObj)
 
-        this.notificacoes.push({
-          msg:`O Produto: ${this.tipo} acabou de ser criado!`,
-          icon: 'check',
-          color: 'green'
-        });
+          const req = await fetch('http://localhost:3000/ingredientes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: dataJson
+          })
 
-        //Limpar mensagem após enviar
-       setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
+          const res = await req.json()
 
-        // Limpar campos ao enviar
-        this.categorias = null
-        this.tipo = null
-        this.btnLoader = false
+          // Atualize os dados localmente após criar um novo produto
+          this.dados = res;
 
-        this.getDados()
-       } else {
-        this.notificacoes.push({
-          msg:`Por favor preencha os dados`,
-          icon: 'warning',
-          color: 'red'
-        });
+          // Mensagem do sistema ao enviar pedido
+          this.update = !this.update;
+          this.updateKey += 1;
 
-        setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
-       }
+          this.notificacoes.push({
+            msg: `O Produto: ${this.tipo} acabou de ser criado!`,
+            icon: 'check',
+            color: 'green'
+          });
+
+          //Limpar mensagem após enviar
+          setTimeout(() => {
+            this.notificacoes.splice(0, 1);
+          }, 4000);
+
+          // Limpar campos ao enviar
+          this.categorias = null
+          this.tipo = ''
+          this.btnLoader = false
+
+          this.getDados()
+        } else {
+
+          if (this.tipo === '') {
+            this.Tipoinvalido = true;
+          }
+          if (this.categorias === null) {
+            this.Categoriainvalida = true;
+          }
+          this.notificacoes.push({
+            msg: `Por favor preencha os dados`,
+            icon: 'warning',
+            color: 'red'
+          });
+
+          setTimeout(() => {
+            this.notificacoes.splice(0, 1);
+          }, 4000);
+        }
 
       } catch (error) {
         console.error("Houve um erro ao criar o produto", error);
 
         this.notificacoes.push({
-          msg:`Houve um erro ao criar o Produto :(`,
+          msg: `Houve um erro ao criar o Produto :(`,
           icon: 'warning',
           color: 'red'
         });
@@ -154,6 +161,14 @@ export default {
         setTimeout(() => {
           this.notificacoes.splice(0, 1);
         }, 4000);
+      }
+    },
+    validarCampos() {
+      if (this.tipo !== '') {
+        this.Tipoinvalido = false;
+      }
+      if (this.categorias !== null) {
+        this.Categoriainvalida = false;
       }
     },
   },
@@ -242,5 +257,10 @@ input {
 
 .tabela-row select {
   max-width: 200px;
+}
+
+#tipo.invalid,
+#categorias.invalid {
+  border: 2px solid red;
 }
 </style>

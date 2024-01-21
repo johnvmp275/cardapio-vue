@@ -43,7 +43,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
   // Verifica o estado de login a partir do localStorage
-  const isLogged = localStorage.getItem('isLogged') === 'true';
+  const isLogged = localStorage.getItem('isLogged') === 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
   // Se o usuário não estiver autenticado é redirecionado para a página de login
   if (!isLogged && to.name !== 'login') {

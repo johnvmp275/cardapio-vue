@@ -59,7 +59,7 @@ const statusColors = {
   'Solicitado': 'blue',
   'Em produção': 'purple',
   'Finalizado': 'green',
-  'Aguardando...' : 'orange'
+  'Aguardando...': 'orange'
 };
 
 export default {
@@ -195,6 +195,7 @@ export default {
     },
   },
   mounted() {
+    this.getStatus();
     this.getPedidos()
   }
 }
@@ -309,5 +310,4 @@ select {
   content: ':(';
   margin-left: 10px;
 }
-
 </style>

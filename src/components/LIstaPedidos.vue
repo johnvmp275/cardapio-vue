@@ -14,12 +14,13 @@ import Button from './widgets/Button.vue';
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input type="text" name="nome" id="nome" v-model="nome" placeholder="Nome do Cliente" required />
+          <input type="text" name="nome" id="nome" v-model="nome" :class="{ 'invalid': Nomeinvalido }"
+            placeholder="Nome do Cliente" required />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
           <label for="comida">Cardápio:</label>
-          <select name="comida" id="comida" v-model="comida" required>
+          <select name="comida" id="comida" v-model="comida" required :class="{ 'invalid': Comidainvalida }">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
             <option v-for="comida in comidas" :key="comida.id" :value="comida.tipo">
               {{ comida.tipo }}
@@ -41,13 +42,17 @@ import Button from './widgets/Button.vue';
           <section class="opcoes-container">
             <div class="opcoes-complementos" v-for="opcional in opcionaisData" :key="opcional.id">
               <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.tipo" />
-              <span>{{ opcional.tipo }}</span>
+              <span>
+                {{ opcional.tipo }}
+              </span>
             </div>
           </section>
         </div>
         <!-- input para postar o peidido para aba de pedidos -->
         <div class="button-submit">
-          <Button class="btn-submit" @click="criarPedido" :btnLoader="btnLoader">Postar</Button>
+          <Button class="btn-submit" @click="criarPedido" :btnLoader="btnLoader">
+            Postar
+          </Button>
         </div>
       </div>
     </section>
@@ -63,16 +68,30 @@ export default {
       isLoader: false,
       acompanhamentos: null,
       opcionaisData: null,
-      nome: null,
+      nome: '',
       comida: null,
       acompanhamento: null,
       opcionais: [],
       notificacoes: [],
       icon: null,
-      btnLoader: false
+      btnLoader: false,
+      Nomeinvalido: false,
+      Comidainvalida: false
     }
   },
+  watch: {
+    nome: 'validarCampos',
+    comida: 'validarCampos'
+  },
   methods: {
+    validarCampos() {
+      if (this.nome !== '') {
+        this.Nomeinvalido = false;
+      }
+      if (this.comida !== null) {
+        this.Comidainvalida = false;
+      }
+    },
     async getDados() {
       try {
         const req = await fetch('http://localhost:3000/ingredientes')
@@ -89,8 +108,8 @@ export default {
 
     async criarPedido() {
       try {
-        if (this.nome !== null && this.comida !== null) {
-          
+        if (this.nome !== '' && this.comida !== null) {
+
           this.btnLoader = true
 
           const data = {
@@ -117,20 +136,31 @@ export default {
             color: 'green'
           });
 
-          
+
           //Limpar mensagem após enviar
           setTimeout(() => {
             this.notificacoes.splice(0, 1);
           }, 4000);
-          
+
           //Limpar campos ao enviar
-          this.nome = null
+          this.nome = ''
           this.comida = null
           this.acompanhamento = null
           // this.opcionais = ''
 
           this.btnLoader = false
         } else {
+
+          if (this.nome === '') {
+            this.Nomeinvalido = true;
+          }
+
+          if (this.comida === null) {
+            this.Comidainvalida = true;
+          }
+
+          this.validarCampos()
+
           this.notificacoes.push({
             msg: `Por favor preencha os dados`,
             icon: 'warning',
@@ -259,5 +289,10 @@ input::placeholder,
 option,
 select {
   font-family: Montserrat;
+}
+
+#nome.invalid,
+#comida.invalid {
+  border: 2px solid red;
 }
 </style>

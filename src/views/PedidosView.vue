@@ -14,8 +14,4 @@ h1 {
   font-weight: bold;
   margin-bottom: 2rem;
 }
-
-main {
-  overflow: hidden;
-}
 </style>

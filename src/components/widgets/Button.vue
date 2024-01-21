@@ -30,6 +30,8 @@ span {
 button {
     outline: none;
     height: 51px;
+    border: none;
+    cursor: pointer;
 }
 
 @keyframes loader {

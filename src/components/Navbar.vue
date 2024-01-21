@@ -22,6 +22,11 @@ import { RouterLink } from 'vue-router'
             settings
           </span>
         </RouterLink>
+        <a @click="Deslogado">
+          <span class="material-symbols-outlined">
+            exit_to_app
+          </span>
+        </a>
         <div class="indicador">
           <div class="indicador-list"></div>
         </div>
@@ -29,6 +34,26 @@ import { RouterLink } from 'vue-router'
     </section>
   </nav>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      localIsLogged: true,
+    };
+  },
+  methods: {
+    Deslogado() {
+      localStorage.removeItem('isLogged');
+
+      // Update the local data property and emit the event
+      this.localIsLogged = true;
+      this.$emit('Deslogado', this.localIsLogged);
+    },
+
+  },
+}
+</script>
 
 <style scoped>
 .navigation-desktop {
@@ -77,6 +102,10 @@ a span {
   transition: 0.5s;
   color: var(--background-laranja);
   font-size: 34px;
+}
+
+a span:hover{
+  color: var(--background-branco);
 }
 
 .indicador-list {
@@ -143,6 +172,12 @@ a.router-link-active {
 
 .navigation-link a.router-link-active:nth-child(3).router-link-active~.indicador {
   transform: translateY(calc(93px * 2));
+}
+
+Button {
+  z-index: 100;
+  background: none;
+  color: var(--background-branco);
 }
 
 @keyframes animationLink {
