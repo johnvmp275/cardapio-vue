@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall": "npm install && npm run backend"
+  },
   "rewrites": [
     {
       "source": "/(.*)",
