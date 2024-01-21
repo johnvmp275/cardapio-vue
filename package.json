@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "npm install --no-optional && npm run backend",
+    "postinstall": "npm run backend",
     "dev": "vite",
     "build": "vite build",
     "start": "vite preview",
