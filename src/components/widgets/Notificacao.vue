@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class="teste">
+    <div class="notificacao_collumn">
       <div
         class="notificacao-container"
         v-for="(notification, index) in notifications"
@@ -17,7 +16,6 @@
         </button> -->
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -34,7 +32,7 @@ export default {
 </script>
 
 <style scoped>
-.teste {
+.notificacao_collumn {
   position: fixed;
   top: 10px;
   right: 10px;

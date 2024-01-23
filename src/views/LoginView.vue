@@ -3,43 +3,50 @@ import Button from '@/components/widgets/Button.vue'
 import MassageNot from '@/components/widgets/Notificacao.vue'
 </script>
 <template>
-
-  <MassageNot 
-  :notifications="notificacoes" 
-  />
-
+  <MassageNot :notifications="notificacoes" />
   <div>
+    <section>
+      <h1>Faça seu Login</h1>
 
-    <label for="username">
-      Usuário:
-    </label>
+      <div>
+        <label class="label_username" for="username" :class="{ 'invalid': Nomeinvalido }">
 
-    <input 
-    type="text" 
-    id="username" 
-    v-model="userEmail" 
-    required 
-    :class="{ 'invalid': Nomeinvalido }"
-    />
+          <span class="material-symbols-outlined">
+          mail
+          </span>
+      
+          <input type="text" id="username" v-model="userEmail" required placeholder="insira seu email"/>
 
-    <label for="password">
-      Senha:
-    </label>
+        </label>
 
-    <input 
-    type="password" 
-    id="password" 
-    v-model="password" 
-    required 
-    :class="{ 'invalid': Senhainvalido }"
-    />
+        <label class="label_password"  for="password" :class="{ 'invalid': Senhainvalido }" >
 
-    <Button 
-    class="btn-login" 
-    @click="logged">
-    Login
-    </Button>
+          <span class="material-symbols-outlined">
+          lock
+          </span>
 
+          <input :type="showSenha" id="password" v-model="password" required placeholder="insira sua senha"/>
+
+          <button class="mostrar_senha" @click="mostrarSenha">
+
+            <span v-if="showSenha === 'password'" class="material-symbols-outlined">
+            visibility_off
+            </span>
+            
+            <span v-else class="material-symbols-outlined">
+            visibility
+            </span>
+          </button>
+
+        </label>
+
+        <Button class="btn-login" @click="logged">
+          Login
+        </Button>
+
+      </div>
+
+    </section>
   </div>
 </template>
 
@@ -55,7 +62,8 @@ export default {
       senhas: [],
       dados: {},
       Nomeinvalido: false,
-      Senhainvalido: false
+      Senhainvalido: false,
+      showSenha: 'password'
     };
   },
   watch: {
@@ -110,6 +118,9 @@ export default {
         }, 4000);
       }
     },
+    mostrarSenha() {
+      this.showSenha = (this.showSenha === 'password') ? 'text' : 'password';
+    }
   }, mounted() {
     this.getUser()
   }
@@ -119,26 +130,89 @@ export default {
 
 
 <style scoped>
+body {
+  background: var(--background-cinza);
+}
+
 div {
+  background: var(--background-cinza);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  grid-column: 2;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: var(--background-branco);
+  box-shadow: 0 0 15px 0 var(--background-laranja);
+  padding: 16px;
+  width: 100%;
+  max-width: 400px;
+  height: 450px;
+  border-radius: 8px;
+  position: relative;
+  /* border-left: 8px solid var(--background-laranja); */
+}
+
+section div {
+  background: var(--background-branco);
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .btn-login {
   width: 100%;
   max-width: 250px;
-  border: 2px solid;
+  background: var(--background-laranja);
+  color: var(--background-branco);
 }
 
-.teste {
+label {
   display: flex;
-  margin-top: 20px;
+  border: 2px solid #1f1d2b36;
+  border-radius: 5px;
+  align-items: center;
+  width: 100%;
+  max-width: 250px;
+  gap: 5px;
+  padding: 0 8px;
 }
 
-#username.invalid,
-#password.invalid {
+label span {
+  color: var(--background-cinza);
+}
+
+input {
+  border: none;
+  height: 40px;
+  padding: 16px 0;
+}
+
+input,
+button {
+  border-radius: 5px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mostrar_senha{
+  display: flex;
+  align-items: center;
+  border: none;
+  width: 24px;
+  cursor: pointer;
+}
+
+.label_username.invalid,
+.label_password.invalid {
   border: 2px solid red;
 }
+
 </style>

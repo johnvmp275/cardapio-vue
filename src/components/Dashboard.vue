@@ -19,6 +19,11 @@ import Button from './widgets/Button.vue'
             <strong>Acompanhamento:</strong>
             <strong>Complementos:</strong>
             <strong>Status:</strong>
+            <button class="refresh" @click="refreshDados">
+              <span class="material-symbols-outlined">
+              autorenew
+              </span>
+            </button>
           </div>
         </div>
         <div id="tabela-rows">
@@ -39,7 +44,6 @@ import Button from './widgets/Button.vue'
             </div>
             <div class="status-pedido">
               <select name="status" id="status" @change="updateStatus($event, pedido.id)">
-                <option value="Aguardando...">Aguardando..</option>
                 <option v-for="s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
                   {{ s.tipo }}
                 </option>
@@ -56,7 +60,6 @@ import Button from './widgets/Button.vue'
 <script>
 //Objeto que mapeia tipos de status para cores
 const statusColors = {
-  'Solicitado': 'blue',
   'Em produção': 'purple',
   'Finalizado': 'green',
   'Aguardando...': 'orange'
@@ -150,9 +153,6 @@ export default {
 
         //Troca cor dos status de acordo com seu valor
         switch (selectedStatus) {
-          case 'Solicitado':
-            this.color = statusColors['Solicitado'];
-            break;
           case 'Em produção':
             this.color = statusColors['Em produção'];
             break;
@@ -193,6 +193,9 @@ export default {
         }, 4000);
       }
     },
+    refreshDados(){
+      this.getPedidos()
+    }
   },
   mounted() {
     this.getStatus();
@@ -229,13 +232,13 @@ export default {
 .tabela-row {
   display: grid;
   padding: 12px;
-  grid-template-columns: 50px repeat(4, 1.8fr) 3fr;
   width: 100%;
   align-items: center;
   gap: 4px;
 }
 
 .tabela-topo {
+  grid-template-columns: 50px repeat(4, 2fr) 3fr 0.1fr;
   padding: 12px;
   border-bottom: 3px solid var(--background-cinza);
 }
@@ -257,6 +260,7 @@ export default {
 
 .tabela-row {
   width: 100%;
+  grid-template-columns: 50px repeat(4, 1.8fr) 3fr;
   padding: 12px;
   border-bottom: 3px solid var(--background-cinza);
 }
@@ -309,5 +313,27 @@ select {
 .aviso-sem-estoque::after {
   content: ':(';
   margin-left: 10px;
+}
+
+.refresh{
+  border: none;
+  cursor: pointer;
+}
+
+.refresh:hover span {
+  animation: refreshRotation 1.5s infinite linear;
+}
+
+@keyframes refreshRotation {
+  from {
+ 
+  transform: rotate(0deg);
+
+  }
+  to {
+
+    transform: rotate(360deg);
+
+  }
 }
 </style>
