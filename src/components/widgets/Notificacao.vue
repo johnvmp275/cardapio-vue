@@ -39,6 +39,7 @@ export default {
   display: flex;
   flex-direction: column-reverse;
   transition: 0.5s;
+  z-index: 99999999999999;
 }
 
 .notificacao-container {

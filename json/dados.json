@@ -82,15 +82,18 @@
   "status": [
     {
       "id": 1,
-      "tipo": "Aguardando..."
+      "tipo": "Aguardando...",
+      "color": "orange"
     },
     {
       "id": 2,
-      "tipo": "Em produção"
+      "tipo": "Em produção",
+      "color": "purple"
     },
     {
       "id": 3,
-      "tipo": "Finalizado"
+      "tipo": "Finalizado",
+      "color": "green"
     }
   ],
   "pedidos": [
@@ -102,7 +105,7 @@
         "Coca-Cola 2L",
         "Suco de Laranja 800ml"
       ],
-      "status": "Em produção",
+      "status": "Aguardando...",
       "id": 1
     },
     {

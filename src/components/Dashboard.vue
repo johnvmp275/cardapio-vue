@@ -21,7 +21,7 @@ import Button from './widgets/Button.vue'
             <strong>Status:</strong>
             <button class="refresh" @click="refreshDados">
               <span class="material-symbols-outlined">
-              autorenew
+                autorenew
               </span>
             </button>
           </div>
@@ -31,29 +31,38 @@ import Button from './widgets/Button.vue'
             Ops! Ainda Não possui nenhum pedido
           </p>
           <div class="tabela-row" v-for="pedido in pedidos" :key="pedido.id">
-            <div class="id-pedido">{{ pedido.id }}</div>
-            <div>{{ pedido.nome }}</div>
-            <div>{{ pedido.comida }}</div>
-            <div>{{ pedido.acompanhamento }}</div>
+            <div class="row_div">{{ pedido.id }}</div>
+            <div class="row_div">{{ pedido.nome }}</div>
+            <div class="row_div">{{ pedido.comida }}</div>
+            <div class="row_div">{{ pedido.acompanhamento }}</div>
             <div>
-              <ul>
+              <ul class="list_pedidos">
                 <li v-for="(opcional, index) in pedido.opcionais" :key="index">
                   <p>{{ opcional }}</p>
                 </li>
               </ul>
             </div>
-            <div class="status-pedido">
-              <select name="status" id="status" @change="updateStatus($event, pedido.id)">
-                <option v-for="s in status" :key="s.id" :value="s.tipo" :selected="pedido.status == s.tipo">
-                  {{ s.tipo }}
-                </option>
-              </select>
+            <div class="row_div">
+              <section class="status-pedido">
+                <div @click="toggleDropdown(pedido.id)" class="status_selecionado">
+                  <div class="circle_status" :style="{background: pedido.color}"></div>
+                  {{ getSelectedStatus(pedido.status) }}
+                </div>
+                <ul v-show="showDropdown[pedido.id]" class="dropdown">
+                  <li v-for="(s, index) in status" :key="s.id" @click="updateStatus(s.tipo, pedido.id, index)">
+                    <div class="circle_status" :style="{background: s.color}"></div>
+                    {{ s.tipo }}
+                  </li>
+                </ul>
+              </section>
               <Button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</Button>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div>
   </div>
 </template>
 
@@ -75,6 +84,8 @@ export default {
       status: [],
       isLoader: false,
       notificacoes: [],
+      showDropdown: {},
+      selectedStatus: {}
     }
   },
   methods: {
@@ -135,11 +146,9 @@ export default {
         }, 4000);
       }
     },
-    async updateStatus(event, id) {
+    async updateStatus(selectedStatus, id, pedidoId) {
       try {
-        const option = event.target.value
-
-        const dataJson = JSON.stringify({ status: option })
+        const dataJson = JSON.stringify({ status: selectedStatus });
 
         const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
           method: 'PATCH',
@@ -149,7 +158,6 @@ export default {
 
         const res = await req.json()
 
-        const selectedStatus = event.target.value;
 
         //Troca cor dos status de acordo com seu valor
         switch (selectedStatus) {
@@ -167,17 +175,23 @@ export default {
             this.color = 'green';
         }
 
-        //Mensagem do sistema ao enviar pedido
-        this.notificacoes.push({
-          msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status}!`,
-          icon: 'check',
-          color: `${this.color}`
-        });
+          // Atualizar o status selecionado apenas para o item específico
+          this.getPedidos()
 
-        //Limpar mensagem após enviar
-        setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
+          this.showDropdown = !this.showDropdown[pedidoId]
+
+          console.log(pedidoId);
+          // Mensagem do sistema ao enviar pedido
+          this.notificacoes.push({
+            msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status}!`,
+            icon: 'check',
+            color: `${this.color}`
+          });
+
+          // Limpar mensagem após enviar
+          setTimeout(() => {
+            this.notificacoes.splice(0, 1);
+          }, 4000);
 
       } catch (error) {
         console.error('Houve um erro de busca', error)
@@ -193,13 +207,20 @@ export default {
         }, 4000);
       }
     },
-    refreshDados(){
+    refreshDados() {
       this.getPedidos()
-    }
+    },
+    getSelectedStatus(pedidoId) {
+      return this.selectedStatus = pedidoId;
+    },
+    toggleDropdown(pedidoId) {
+      // this.showDropdown = !this.showDropdown[pedidoId]
+      this.showDropdown = { ...this.showDropdown, [pedidoId]: !this.showDropdown[pedidoId] };
+    },
   },
   mounted() {
-    this.getStatus();
     this.getPedidos()
+    this.getStatus()
   }
 }
 </script>
@@ -208,7 +229,7 @@ export default {
 .tabela-scroll {
   width: 100%;
   padding: 10px 0;
-  overflow-x: auto;
+  /* overflow-y: auto; */
 }
 
 .tabela-scroll::-webkit-scrollbar {
@@ -248,12 +269,11 @@ export default {
   display: flex;
 }
 
-.tabela-topo div,
-.tabela-row div {
+.tabela-row .row_div {
   display: flex;
   width: 100%;
   min-width: 100%;
-  overflow: hidden;
+  align-items: center;
   padding: 0 6px;
   gap: 10px;
 }
@@ -288,7 +308,7 @@ select {
   padding: 6px;
 }
 
-.tabela-row ul {
+.tabela-row .list_pedidos {
   width: 100%;
   max-height: 68px;
   overflow-y: auto;
@@ -315,7 +335,7 @@ select {
   margin-left: 10px;
 }
 
-.refresh{
+.refresh {
   border: none;
   cursor: pointer;
 }
@@ -324,12 +344,56 @@ select {
   animation: refreshRotation 1.5s infinite linear;
 }
 
+.status-pedido {
+  cursor: pointer;
+  width: 150px;
+  position: relative;
+}
+
+.status_selecionado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid;
+  border-radius: 5px;
+  height: 51px;
+  width: 100%;
+  min-height: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  margin-top: 5px;
+  background: var(--background-branco);
+  border: 2px solid var(--background-cinza);
+  /* color: var(--background-branco); */
+  z-index: 100;
+  width: 100%;
+  border-radius: 5px;
+  height: 97px;
+  overflow-y: auto;
+
+}
+
+.dropdown li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown li .circle_status{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
 @keyframes refreshRotation {
   from {
- 
-  transform: rotate(0deg);
+
+    transform: rotate(0deg);
 
   }
+
   to {
 
     transform: rotate(360deg);
