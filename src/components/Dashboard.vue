@@ -20,9 +20,7 @@ import Button from './widgets/Button.vue'
             <strong>Complementos:</strong>
             <strong>Status:</strong>
             <button class="refresh" @click="refreshDados">
-              <span class="material-symbols-outlined">
-                autorenew
-              </span>
+              <span class="material-symbols-outlined"> autorenew </span>
             </button>
           </div>
         </div>
@@ -45,15 +43,21 @@ import Button from './widgets/Button.vue'
             <div class="row_div">
               <section class="status-pedido">
                 <div @click="toggleDropdown(pedido.id)" class="status_selecionado">
-                  <div class="circle_status" :style="{background: pedido.color}"></div>
-                  {{ getSelectedStatus(pedido.status) }}
+                  <div class="circle_status" :style="{ background: color }"></div>
+                  <p>{{ getSelectedStatus(pedido.status) }}</p>
                 </div>
-                <ul v-show="showDropdown[pedido.id]" class="dropdown">
-                  <li v-for="(s, index) in status" :key="s.id" @click="updateStatus(s.tipo, pedido.id, index)">
-                    <div class="circle_status" :style="{background: s.color}"></div>
-                    {{ s.tipo }}
-                  </li>
-                </ul>
+                <div class="dropdown-container" v-show="showDropdown[pedido.id]">
+                  <ul class="dropdown">
+                    <li
+                      v-for="(s, index) in status"
+                      :key="s.id"
+                      @click="updateStatus(s.tipo, pedido.id, index)"
+                    >
+                      <div class="circle_status" :style="{ background: s.color }"></div>
+                      {{ s.tipo }}
+                    </li>
+                  </ul>
+                </div>
               </section>
               <Button class="delete-btn" @click="deletePedido(pedido.id)">Cancelar</Button>
             </div>
@@ -62,23 +66,21 @@ import Button from './widgets/Button.vue'
       </div>
     </div>
   </div>
-  <div>
-  </div>
 </template>
 
 <script>
 //Objeto que mapeia tipos de status para cores
 const statusColors = {
   'Em produção': 'purple',
-  'Finalizado': 'green',
+  Finalizado: 'green',
   'Aguardando...': 'orange'
-};
+}
 
 export default {
   name: 'Pedidos',
   data() {
     return {
-      color: null,
+      color: 'green',
       pedidos: [],
       pedidosId: null,
       status: [],
@@ -124,12 +126,12 @@ export default {
           msg: `O Pedido N° ${id} foi removido!`,
           icon: 'warning',
           color: 'red'
-        });
+        })
 
         //Limpar mensagem após enviar
         setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
+          this.notificacoes.splice(0, 1)
+        }, 4000)
 
         this.getPedidos()
       } catch (error) {
@@ -139,16 +141,20 @@ export default {
           msg: `Houve um erro ao deletar o Produto :(`,
           icon: 'warning',
           color: 'red'
-        });
+        })
 
         setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
+          this.notificacoes.splice(0, 1)
+        }, 4000)
       }
     },
-    async updateStatus(selectedStatus, id, pedidoId) {
+    async updateStatus(selectedStatus, id) {
       try {
-        const dataJson = JSON.stringify({ status: selectedStatus });
+        //Fecha o dropdown após ser selecionado
+
+        this.showDropdown[id] = false
+
+        const dataJson = JSON.stringify({ status: selectedStatus })
 
         const req = await fetch(`http://localhost:3000/pedidos/${id}`, {
           method: 'PATCH',
@@ -158,41 +164,36 @@ export default {
 
         const res = await req.json()
 
-
         //Troca cor dos status de acordo com seu valor
         switch (selectedStatus) {
           case 'Em produção':
-            this.color = statusColors['Em produção'];
-            break;
+            this.color = statusColors['Em produção']
+            break
           case 'Finalizado':
-            this.color = statusColors['Finalizado'];
-            break;
+            this.color = statusColors['Finalizado']
+            break
           case 'Aguardando...':
-            this.color = statusColors['Aguardando...'];
-            break;
+            this.color = statusColors['Aguardando...']
+            break
 
           default:
-            this.color = 'green';
+            this.color = 'green'
         }
 
-          // Atualizar o status selecionado apenas para o item específico
-          this.getPedidos()
+        // Atualizar o status selecionado apenas para o item específico
+        this.getPedidos()
 
-          this.showDropdown = !this.showDropdown[pedidoId]
+        // Mensagem do sistema ao enviar pedido
+        this.notificacoes.push({
+          msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status}!`,
+          icon: 'check',
+          color: `${this.color}`
+        })
 
-          console.log(pedidoId);
-          // Mensagem do sistema ao enviar pedido
-          this.notificacoes.push({
-            msg: `O Pedido N° ${res.id} foi atualizado para: ${res.status}!`,
-            icon: 'check',
-            color: `${this.color}`
-          });
-
-          // Limpar mensagem após enviar
-          setTimeout(() => {
-            this.notificacoes.splice(0, 1);
-          }, 4000);
-
+        // Limpar mensagem após enviar
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1)
+        }, 4000)
       } catch (error) {
         console.error('Houve um erro de busca', error)
 
@@ -200,23 +201,26 @@ export default {
           msg: `Houve um erro ao atualizar os Status :(`,
           icon: 'warning',
           color: 'red'
-        });
+        })
 
         setTimeout(() => {
-          this.notificacoes.splice(0, 1);
-        }, 4000);
+          this.notificacoes.splice(0, 1)
+        }, 4000)
       }
     },
     refreshDados() {
       this.getPedidos()
     },
-    getSelectedStatus(pedidoId) {
-      return this.selectedStatus = pedidoId;
+    getSelectedStatus(pedidosId) {
+      return (this.selectedStatus = pedidosId)
     },
-    toggleDropdown(pedidoId) {
-      // this.showDropdown = !this.showDropdown[pedidoId]
-      this.showDropdown = { ...this.showDropdown, [pedidoId]: !this.showDropdown[pedidoId] };
-    },
+    toggleDropdown(pedidosId) {
+      // if(this.showDropdown === true){
+      //   this.showDropdown = false
+      // }
+      this.showDropdown = { ...this.showDropdown, [pedidosId]: !this.showDropdown[pedidosId] }
+      console.log(this.showDropdown[pedidosId])
+    }
   },
   mounted() {
     this.getPedidos()
@@ -232,7 +236,7 @@ export default {
   /* overflow-y: auto; */
 }
 
-.tabela-scroll::-webkit-scrollbar {
+*::-webkit-scrollbar {
   height: 10px;
 }
 
@@ -301,7 +305,7 @@ select {
   font-weight: bold;
 }
 
-.tabela-row ul li {
+.tabela-row .list_pedidos li {
   display: flex;
   list-style: none;
   width: 100%;
@@ -315,7 +319,7 @@ select {
 }
 
 .tabela-row ul::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 .tabela-row ul::-webkit-scrollbar-thumb {
@@ -336,6 +340,7 @@ select {
 }
 
 .refresh {
+  background: transparent;
   border: none;
   cursor: pointer;
 }
@@ -346,42 +351,67 @@ select {
 
 .status-pedido {
   cursor: pointer;
-  width: 150px;
+  width: 170px;
   position: relative;
 }
 
 .status_selecionado {
   display: flex;
-  justify-content: center;
   align-items: center;
   border: 2px solid;
   border-radius: 5px;
   height: 51px;
   width: 100%;
   min-height: 100%;
+  gap: 5px;
+  padding: 5px 10px;
 }
 
-.dropdown {
+.status_selecionado p {
+  max-width: 110px;
+  width: 100%;
+}
+
+.dropdown-container {
   position: absolute;
-  margin-top: 5px;
   background: var(--background-branco);
   border: 2px solid var(--background-cinza);
-  /* color: var(--background-branco); */
   z-index: 100;
   width: 100%;
+  margin-top: 9px;
+  padding: 3px;
   border-radius: 5px;
+}
+.dropdown {
   height: 97px;
   overflow-y: auto;
+}
 
+.dropdown-container::before {
+  content: '';
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  width: 10px;
+  height: 10px;
+  top: -7.8px;
+  right: calc(50% - 5px);
+  transform: rotate(45deg);
+  background: var(--background-branco);
+  border-left: 2px solid var(--background-cinza);
+  border-top: 2px solid var(--background-cinza);
 }
 
 .dropdown li {
   display: flex;
-  align-items: center;
   gap: 5px;
+  align-items: center;
+  list-style: none;
+  width: 100%;
+  padding: 12px 6px;
 }
 
-.dropdown li .circle_status{
+.circle_status {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -389,15 +419,11 @@ select {
 
 @keyframes refreshRotation {
   from {
-
     transform: rotate(0deg);
-
   }
 
   to {
-
     transform: rotate(360deg);
-
   }
 }
 </style>

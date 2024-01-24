@@ -105,7 +105,7 @@
         "Coca-Cola 2L",
         "Suco de Laranja 800ml"
       ],
-      "status": "Aguardando...",
+      "status": "Em produção",
       "id": 1
     },
     {
@@ -115,7 +115,7 @@
       "opcionais": [
         "Coca-Cola 2L"
       ],
-      "status": "Em produção",
+      "status": "Aguardando...",
       "id": 2
     }
   ],

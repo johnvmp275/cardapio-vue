@@ -117,7 +117,7 @@ export default {
             comida: this.comida,
             acompanhamento: this.acompanhamento,
             opcionais: Array.from(this.opcionais),
-            status: 'Solicitado'
+            status: 'Aguardando...'
           }
           const dataJson = JSON.stringify(data)
 
