@@ -39,7 +39,7 @@ import Button from './widgets/Button.vue'
         <div id="tabela-rows">
           <div class="tabela-row" v-for="comida in itensCategoria" :key="comida.id">
             <p class="id-pedido">{{ comida.id }}</p>
-            <strong>{{ comida.tipo }}</strong>
+            <strong class="nome-pedido">{{ comida.tipo }}</strong>
             <Button @click="deleteProduto(comida.id)" class="btn-produto">Remover</Button>
           </div>
           <p class="aviso-sem-estoque" v-if="!itensCategoria.length">
@@ -225,6 +225,7 @@ export default {
 .tabela-topo {
   display: grid;
   padding: 12px;
+  margin-bottom: 10px;
   grid-template-columns: 50px 2fr 2fr 2fr 1.58fr;
   gap: 20px;
   height: 70px;
@@ -325,5 +326,11 @@ h2 {
 
 .itensPorPagina {
   width: 140px;
+}
+
+.nome-pedido{
+  white-space: nowrap;        
+  overflow: hidden;        
+  text-overflow: ellipsis;  
 }
 </style>

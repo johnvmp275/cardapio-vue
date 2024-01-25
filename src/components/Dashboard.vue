@@ -43,16 +43,12 @@ import Button from './widgets/Button.vue'
             <div class="row_div">
               <section class="status-pedido">
                 <div @click="toggleDropdown(pedido.id)" class="status_selecionado">
-                  <div class="circle_status" :style="{ background: color }"></div>
+                  <div class="circle_status" :style="{ background: getCircleColor(pedido.status) }"></div>
                   <p>{{ getSelectedStatus(pedido.status) }}</p>
                 </div>
                 <div class="dropdown-container" v-show="showDropdown[pedido.id]">
                   <ul class="dropdown">
-                    <li
-                      v-for="(s, index) in status"
-                      :key="s.id"
-                      @click="updateStatus(s.tipo, pedido.id, index)"
-                    >
+                    <li v-for="(s, index) in status" :key="s.id" @click="updateStatus(s.tipo, pedido.id, index)">
                       <div class="circle_status" :style="{ background: s.color }"></div>
                       {{ s.tipo }}
                     </li>
@@ -72,7 +68,7 @@ import Button from './widgets/Button.vue'
 //Objeto que mapeia tipos de status para cores
 const statusColors = {
   'Em produção': 'purple',
-  Finalizado: 'green',
+  'Finalizado': 'green',
   'Aguardando...': 'orange'
 }
 
@@ -148,7 +144,7 @@ export default {
         }, 4000)
       }
     },
-    async updateStatus(selectedStatus, id) {
+    async updateStatus(selectedStatus, id, index) {
       try {
         //Fecha o dropdown após ser selecionado
 
@@ -208,19 +204,47 @@ export default {
         }, 4000)
       }
     },
+    getCircleColor(status) {
+      const findColor = this.status.find(s => s.tipo === status);
+
+      if (findColor) {
+        return findColor.color;
+      } else {
+        return 'green';
+      }
+    },
     refreshDados() {
       this.getPedidos()
+
+       // Mensagem do sistema ao enviar pedido
+       this.notificacoes.push({
+          msg: `A sua Lista foi atualizada com sucesso!`,
+          icon: 'check',
+          color: `green`
+        })
+
+        // Limpar mensagem após enviar
+        setTimeout(() => {
+          this.notificacoes.splice(0, 1)
+        }, 4000)
     },
     getSelectedStatus(pedidosId) {
       return (this.selectedStatus = pedidosId)
     },
     toggleDropdown(pedidosId) {
-      // if(this.showDropdown === true){
-      //   this.showDropdown = false
-      // }
-      this.showDropdown = { ...this.showDropdown, [pedidosId]: !this.showDropdown[pedidosId] }
-      console.log(this.showDropdown[pedidosId])
+      
+      // Verifica se os dropdowns estão abertos
+      const dropdownOpen = this.showDropdown[pedidosId];
+
+      // Fecha todos os dropdowns
+      this.showDropdown = false;
+
+      // Toggle ao clicar no dropdown
+      this.showDropdown = { ...this.showDropdown, [pedidosId]: !dropdownOpen };
+
     }
+
+
   },
   mounted() {
     this.getPedidos()
@@ -319,7 +343,7 @@ select {
 }
 
 .tabela-row ul::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
 }
 
 .tabela-row ul::-webkit-scrollbar-thumb {
@@ -358,7 +382,7 @@ select {
 .status_selecionado {
   display: flex;
   align-items: center;
-  border: 2px solid;
+  border: 1px solid  var(--background-cinza);
   border-radius: 5px;
   height: 51px;
   width: 100%;
@@ -375,13 +399,14 @@ select {
 .dropdown-container {
   position: absolute;
   background: var(--background-branco);
-  border: 2px solid var(--background-cinza);
+  border: 1px solid var(--background-cinza);
   z-index: 100;
   width: 100%;
-  margin-top: 9px;
+  margin-top: 10px;
   padding: 3px;
   border-radius: 5px;
 }
+
 .dropdown {
   height: 97px;
   overflow-y: auto;
@@ -394,12 +419,12 @@ select {
   display: flex;
   width: 10px;
   height: 10px;
-  top: -7.8px;
+  top: -6px;
   right: calc(50% - 5px);
   transform: rotate(45deg);
   background: var(--background-branco);
-  border-left: 2px solid var(--background-cinza);
-  border-top: 2px solid var(--background-cinza);
+  border-left: 1px solid  var(--background-cinza);
+  border-top: 1px solid  var(--background-cinza);
 }
 
 .dropdown li {

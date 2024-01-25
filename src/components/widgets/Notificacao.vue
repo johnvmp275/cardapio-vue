@@ -1,21 +1,17 @@
 <template>
-    <div class="notificacao_collumn">
-      <div
-        class="notificacao-container"
-        v-for="(notification, index) in notifications"
-        :key="index"
-      >
-        <span class="material-symbols-outlined" :style="{ background: notification.color }">
-          {{ notification.icon }}
-        </span>
-        <p>
-          {{ notification.msg }}
-        </p>
-        <!-- <button @click="closeNotification">
-          <span class="material-symbols-outlined"> cancel </span>
-        </button> -->
-      </div>
+  <div class="notificacao_collumn">
+    <div class="notificacao-container" v-for="(notification, index) in notifications" :key="index">
+      <span class="material-symbols-outlined" :style="{ background: notification.color }">
+        {{ notification.icon }}
+      </span>
+      <p>
+        {{ notification.msg }}
+      </p>
+      <!-- <button @click="closeNotification(index)">
+        <span class="material-symbols-outlined"> cancel </span>
+      </button> -->
     </div>
+  </div>
 </template>
 
 <script>
@@ -24,9 +20,14 @@ export default {
     notifications: Array
   },
   // methods: {
-  //   closeNotification() {
-  //     this.notifications = []
-  //   }
+  //   closeNotification(index) {
+  //     // Clear the timeout associated with the notification being closed
+  //     const timeoutId = this.notifications[index].timeoutId;
+  //     clearTimeout(timeoutId);
+
+  //     // Remove the notification from the array
+  //     this.notifications.splice(index, 1);
+  //   },
   // }
 }
 </script>
@@ -77,14 +78,6 @@ span {
   align-items: center;
   color: var(--background-branco);
   border-radius: 8px 0 0 8px;
-}
-
-p::-webkit-scrollbar {
-  width: 10px;
-}
-
-p::-webkit-scrollbar-thumb {
-  background: var(--background-branco);
 }
 
 button {
