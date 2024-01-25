@@ -46,10 +46,6 @@
       {
         "id": 4,
         "tipo": "Farofa"
-      },
-      {
-        "id": 5,
-        "tipo": "qewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewewew"
       }
     ],
     "opcionais": [
@@ -119,16 +115,8 @@
       "opcionais": [
         "Coca-Cola 2L"
       ],
-      "status": "Aguardando...",
+      "status": "Finalizado",
       "id": 2
-    },
-    {
-      "nome": "dqwdqwdqqdqw",
-      "comida": "Pizza 4 queijo",
-      "acompanhamento": null,
-      "opcionais": [],
-      "status": "Aguardando...",
-      "id": 3
     }
   ],
   "users": [

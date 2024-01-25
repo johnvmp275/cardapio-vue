@@ -100,6 +100,18 @@ export default {
       }
       this.isLoader = true
     },
+    async getPedidosNovos() {
+      try {
+        const req = await fetch('http://localhost:3000/pedidos')
+        const data = await req.json()
+
+        this.pedidos = data
+        // resgate de status do pedidos
+        this.getStatus()
+      } catch (error) {
+        console.error('Houve um erro de busca', error)
+      }
+    },
     async getStatus() {
       try {
         const req = await fetch('http://localhost:3000/status')
@@ -249,6 +261,10 @@ export default {
   mounted() {
     this.getPedidos()
     this.getStatus()
+
+    setInterval(() => {
+    this.getPedidosNovos();
+    }, 1000);
   }
 }
 </script>
