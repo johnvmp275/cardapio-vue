@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+const userNivel = localStorage.getItem('userNivel');
 </script>
 
 <template>
@@ -7,17 +8,17 @@ import { RouterLink } from 'vue-router'
   <nav class="navigation-desktop">
     <section class="navigation-section">
       <div class="navigation-link">
-        <RouterLink to="/">
+        <RouterLink v-if="userNivel === 'normal' || userNivel === 'admin'" to="/">
           <span class="material-symbols-outlined">
             store
           </span>
         </RouterLink>
-        <RouterLink to="/pedidos">
+        <RouterLink v-if="userNivel === 'gerenciador' || userNivel === 'admin'" to="/pedidos">
           <span class="material-symbols-outlined">
             shopping_cart
           </span>
         </RouterLink>
-        <RouterLink to="/config" class="animation-rotate">
+        <RouterLink v-if="userNivel === 'admin'" to="/config" class="animation-rotate">
           <span class="material-symbols-outlined">
             settings
           </span>
@@ -36,6 +37,7 @@ import { RouterLink } from 'vue-router'
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -45,6 +47,7 @@ export default {
   methods: {
     Deslogado() {
       localStorage.removeItem('isLogged');
+      localStorage.removeItem('userNivel');
 
       // Update the local data property and emit the event
       this.localIsLogged = true;

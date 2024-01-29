@@ -12,48 +12,44 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: CardapioView,
+      meta: { requiredNiveis: ['normal', 'admin'] },
     },
     {
       path: '/pedidos',
       name: 'pedidos',
-      component: PedidosView
-      // component: () => import('../views/CardapioView.vue')
+      component: PedidosView,
+      meta: { requiredNiveis: ['gerenciador', 'admin'] },
     },
     {
       path: '/config',
       name: 'config',
-      component: ConfigView
-      // component: () => import('../views/CardapioView.vue')
+      component: ConfigView,
+      meta: { requiredNiveis: ['admin'] },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView
-      // component: () => import('../views/CardapioView.vue')
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: NotFound
+      component: NotFound,
     },
   ]
 })
 
 // Adicionando lógica de verificação de login
 router.beforeEach((to, from, next) => {
-
-  // Verifica o estado de login a partir do localStorage
   const isLogged = localStorage.getItem('isLogged') === 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const userNivel = localStorage.getItem('userNivel');
 
-  // Se o usuário não estiver autenticado é redirecionado para a página de login
-  if (!isLogged && to.name !== 'login') {
-    next('/login');
-  } else if (isLogged && to.name === 'login') {
-    next('/'); 
+  // Se o usuário não estiver autenticado ou não tiver o nível adequado, redirecione para a página de login
+  if (!isLogged || (to.meta && to.meta.requiredNiveis && !to.meta.requiredNiveis.includes(userNivel))) {
+    next({name: 'NotFound'});
   } else {
     next();
   }
 });
 
-
-export default router
+export default router;

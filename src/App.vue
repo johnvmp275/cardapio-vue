@@ -22,11 +22,13 @@ import Login from './views/LoginView.vue'
 
 <script>
 const storedIsLogged = localStorage.getItem('isLogged');
+const storedUserNivel = localStorage.getItem('userNivel');
 
 export default {
   data() {
     return {
-      isLogged: true
+      isLogged: true,
+      userNivel: storedUserNivel,
     };
   },
   created() {

@@ -87,6 +87,7 @@ export default {
 
       this.emails = data.map(user => user.email);
       this.senhas = data.map(user => user.senha);
+      this.niveis = data.map(user => user.nivel);
     },
     logged() {
       const userEmail = this.emails.findIndex(email => email === this.userEmail);
@@ -95,10 +96,20 @@ export default {
       if (userEmail !== -1 && userSenha) {
         localStorage.setItem('isLogged', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
+        localStorage.setItem('userNivel', this.niveis[userEmail]);
+
         this.localIsLogged = false;
         this.$emit('UserLogado', this.localIsLogged);
 
-        this.$router.push('/')
+        const userNivel = localStorage.getItem('userNivel');
+        
+        if (userNivel === 'gerenciador') {
+          this.$router.push('/pedidos');
+        } else if (userNivel === 'normal') {
+          this.$router.push('/');
+        } else {
+          this.$router.push('/');
+        }
       } else {
 
         if (this.userEmail === '') {

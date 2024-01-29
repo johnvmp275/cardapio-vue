@@ -5,14 +5,32 @@
                 <h2>404</h2>
                 <p>Página não encontrada</p>
             </div>
-            <router-link to="/">
-                Voltar para Home
+            <router-link :to="paginaInicial">
+                Voltar para a sua página
             </router-link>
         </section>
     </main>
 </template>
 
 <script>
+const userNivel = localStorage.getItem('userNivel');
+
+export default {
+    data() {
+        return {
+            paginaInicial: '/'
+        }
+    },
+    mounted() {
+        if (userNivel === 'gerenciador') {
+            this.paginaInicial = '/pedidos';
+        } else if (userNivel === 'normal') {
+            this.paginaInicial = '/';
+        } else {
+            this.paginaInicial = '/';
+        }
+    }
+}
 </script>
 
 <style scoped>

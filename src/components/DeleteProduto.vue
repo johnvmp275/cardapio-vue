@@ -1,12 +1,11 @@
 <script setup>
 import MassageNot from './widgets/Notificacao.vue'
-import Loader from './widgets/Loader.vue'
 import Pagination from './widgets/Pagination.vue'
 import Button from './widgets/Button.vue'
+import DefaultSelect from './widgets/DefaultSelect.vue'
 </script>
 
 <template>
-  <Loader :isLoader="isLoader" />
   <h2>Limpeza do Cardápio:</h2>
   <div>
     <div class="tabela-scroll">
@@ -19,40 +18,45 @@ import Button from './widgets/Button.vue'
           <strong>Titulo do prato:</strong>
           <div>
             <strong>Categoria:</strong>
-            <select name="categoria" id="categoria" v-model="categoria" @change="atualizarCategoria">
-              <option value="comidas" selected>Principal</option>
-              <option value="acompanhamentos">Acompanhamento</option>
-              <option value="opcionais">Complemento</option>
-            </select>
+            <DefaultSelect 
+            :items="categoriaItems" 
+            :selectedItem="categoria" 
+            @item-selected="categoriaSelect"
+             />
           </div>
           <div>
             <strong>Ordenação:</strong>
-            <select class="itensPorPagina" name="itensPorPagina" id="itensPorPagina" v-model="itensPorPagina"
-              @change="numerosPagina">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="6" selected>6</option>
-            </select>
+            <DefaultSelect 
+            :items="itensPorPaginaItems" 
+            :selectedItem="itensPorPagina" 
+            @item-selected="numerosPagina" 
+            />
           </div>
+
           <strong>Editar:</strong>
         </div>
         <div id="tabela-rows">
           <div class="tabela-row" v-for="comida in itensCategoria" :key="comida.id">
             <p class="id-pedido">{{ comida.id }}</p>
             <strong class="nome-pedido">{{ comida.tipo }}</strong>
-            <Button @click="deleteProduto(comida.id)" class="btn-produto">Remover</Button>
+            <Button @click="deleteProduto(comida.id)" class="btn-produto">
+              <span class="material-symbols-outlined">
+                delete
+              </span>
+            </Button>
           </div>
           <p class="aviso-sem-estoque" v-if="!itensCategoria.length">
             Não há itens nesta categoria
           </p>
         </div>
       </div>
-      <Pagination
-       :paginaAtual="paginaAtual" 
-       :totalPages="totalPages" 
-       :itensCategoria="itensCategoria"
-       :getDados="getDados" 
-       @paginaMudada="atualizarPagina" />
+          <Pagination 
+          :paginaAtual="paginaAtual" 
+          :totalPages="totalPages" 
+          :itensCategoria="itensCategoria"
+          :getDados="getDados" 
+          @paginaMudada="atualizarPagina"
+          />
     </div>
   </div>
 </template>
@@ -95,7 +99,7 @@ export default {
       paginaAtual: 1,
       updateList: true,
       listKey: 0,
-      isLoader: false,
+      dropdownOpen: false,
     }
   },
   computed: {
@@ -109,30 +113,26 @@ export default {
       const allItems = this[this.categoria] || []
 
       return allItems.slice(startIndex, endIndex)
-    }
+    },
+    itensPorPaginaItems() {
+      return [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 6, label: '6' },
+      ];
+    },
+    categoriaItems() {
+      return [
+        { value: 'comidas', label: 'Principal' },
+        { value: 'acompanhamentos', label: 'Acompanhamento' },
+        { value: 'opcionais', label: 'Complemento' },
+      ];
+    },
+
   },
   methods: {
-    atualizarCategoria() {
-      // Atualiza a lista de itens a serem exibidos na tabela quando a categoria é alterada
-      this.itensCategoria = this[this.categoria]
-      this.paginaAtual = 1
-    },
-    numerosPagina() {
-      this.paginaAtual = 1
-      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString())
-    },
-    carregarConfiguracoes() {
-      const itensPorPaginaSalvos = localStorage.getItem('itensPorPagina')
-      if (itensPorPaginaSalvos) {
-        this.itensPorPagina = parseInt(itensPorPaginaSalvos)
-      }
-    },
-    atualizarPagina(novaPagina) {
-      this.paginaAtual = novaPagina
-    },
     async carregarDados() {
       await this.getDados();
-      this.isLoader = true
     },
     async deleteProduto(id) {
       try {
@@ -186,6 +186,27 @@ export default {
           this.notificacoes.splice(0, 1);
         }, 4000);
       }
+    },
+    categoriaSelect(value) {
+      this.categoria = value;
+
+      this.itensCategoria = this[this.categoria];
+      this.paginaAtual = 1;
+    },
+    numerosPagina(value) {
+      this.itensPorPagina = value;
+
+      this.paginaAtual = 1;
+      localStorage.setItem('itensPorPagina', this.itensPorPagina.toString());
+    },
+    carregarConfiguracoes() {
+      const itensPorPaginaSalvos = localStorage.getItem('itensPorPagina')
+      if (itensPorPaginaSalvos) {
+        this.itensPorPagina = parseInt(itensPorPaginaSalvos)
+      }
+    },
+    atualizarPagina(novaPagina) {
+      this.paginaAtual = novaPagina
     },
   },
   mounted() {
@@ -249,18 +270,6 @@ export default {
   font-weight: bold;
 }
 
-select {
-  cursor: pointer;
-  max-width: 200px;
-  padding: 12px;
-  width: 100%;
-  height: 100%;
-}
-
-option {
-  cursor: pointer;
-}
-
 h2 {
   margin-top: 2rem;
   font-size: 2rem;
@@ -298,12 +307,17 @@ h2 {
 .btn-produto {
   cursor: pointer;
   width: 100%;
-  max-width: 170px;
+  max-width: 80px;
   background: var(--background-cinza);
   color: var(--background-branco);
   padding: 12px 6px;
   border: none;
   font-weight: bold;
+  transition: .6s;
+}
+
+.btn-produto:hover{
+  background: red;
 }
 
 .tabela-row div {
@@ -328,9 +342,9 @@ h2 {
   width: 140px;
 }
 
-.nome-pedido{
-  white-space: nowrap;        
-  overflow: hidden;        
-  text-overflow: ellipsis;  
+.nome-pedido {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

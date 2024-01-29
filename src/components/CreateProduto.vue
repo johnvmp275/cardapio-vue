@@ -2,9 +2,12 @@
 import MassageNot from './widgets/Notificacao.vue'
 import Button from './widgets/Button.vue'
 import DeleteProduto from './DeleteProduto.vue'
+import CheckSelect from './widgets/CheckSelect.vue'
+import Loader from './widgets/Loader.vue'
 </script>
 
 <template>
+  <Loader :isLoader="isLoader" />
   <MassageNot :notifications="notificacoes" />
   <h1>Menu Personalizado</h1>
   <div>
@@ -19,23 +22,36 @@ import DeleteProduto from './DeleteProduto.vue'
         </div>
         <div id="tabela-rows">
           <div class="tabela-row">
-            <input type="text" id="tipo" placeholder="insira o titulo" v-model="tipo" required
-              :class="{ 'invalid': Tipoinvalido }" />
-            <select name="categorias" id="categorias" v-model="categorias" required
-              :class="{ 'invalid': Categoriainvalida }">
-              <option value="null" style="display: none;">Tipo de prato</option>
-              <option value="comidas">Principal</option>
-              <option value="acompanhamentos">Acompanhamento</option>
-              <option value="opcionais">Complemento</option>
-            </select>
-            <Button @click="criarProduto" class="btn-produto" :btnLoader="btnLoader">Criar</Button>
+            <input 
+            type="text" 
+            id="tipo" 
+            placeholder="insira o titulo" 
+            v-model="tipo"
+            :class="{ 'invalid': Tipoinvalido }" 
+            />
+            <CheckSelect 
+            :items="categoriaItems" 
+            :selectedItem="categorias"
+            @item-selected="categoriaSelect"
+            :Categoriainvalida="Categoriainvalida" 
+            />
+            <Button @click="criarProduto" class="btn-produto" :btnLoader="btnLoader">
+              Criar
+            </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <DeleteProduto :getDados="getDados" :categoria="categoria" :comidas="comidas" :acompanhamentos="acompanhamentos"
-    :opcionais="opcionais" :deleteProduto="deleteProduto" :dados="dados" />
+          <DeleteProduto 
+          :getDados="getDados" 
+          :categoria="categoria" 
+          :comidas="comidas" 
+          :acompanhamentos="acompanhamentos"
+          :opcionais="opcionais"
+          :deleteProduto="deleteProduto" 
+          :dados="dados" 
+          />
 </template>
 
 <script>
@@ -46,7 +62,7 @@ export default {
       nome: null,
       tipo: '',
       dados: {},
-      categorias: null,
+      categorias: 'Tipo de prato',
       update: true,
       updateKey: 0,
       notificacoes: [],
@@ -55,12 +71,22 @@ export default {
       opcionais: [],
       btnLoader: false,
       Tipoinvalido: false,
-      Categoriainvalida: false
+      Categoriainvalida: false,
+      isLoader: false
     }
   },
   watch: {
     tipo: 'validarCampos',
     categorias: 'validarCampos'
+  },
+  computed: {
+    categoriaItems() {
+      return [
+        { value: 'comidas', label: 'Principal' },
+        { value: 'acompanhamentos', label: 'Acompanhamento' },
+        { value: 'opcionais', label: 'Complemento' },
+      ];
+    },
   },
   methods: {
     async getDados() {
@@ -77,13 +103,15 @@ export default {
         this.opcionais = data.opcionais || []
 
         this.itensCategoria = this[this.categoria]
+
+        this.isLoader = true
       } catch (error) {
         console.error('Houve um erro de busca', error)
       }
     },
     async criarProduto() {
       try {
-        if (this.tipo !== '' && this.categorias !== null) {
+        if (this.tipo !== '' && this.categorias !== 'Tipo de prato') {
 
           this.btnLoader = true
 
@@ -125,7 +153,7 @@ export default {
           }, 4000);
 
           // Limpar campos ao enviar
-          this.categorias = null
+          this.categorias = 'Tipo de prato'
           this.tipo = ''
           this.btnLoader = false
 
@@ -135,7 +163,7 @@ export default {
           if (this.tipo === '') {
             this.Tipoinvalido = true;
           }
-          if (this.categorias === null) {
+          if (this.categorias === 'Tipo de prato') {
             this.Categoriainvalida = true;
           }
           this.notificacoes.push({
@@ -167,9 +195,12 @@ export default {
       if (this.tipo !== '') {
         this.Tipoinvalido = false;
       }
-      if (this.categorias !== null) {
+      if (this.categorias !== 'Tipo de prato') {
         this.Categoriainvalida = false;
       }
+    },
+    categoriaSelect(value) {
+      this.categorias = value;
     },
   },
   mounted() {
@@ -182,7 +213,7 @@ export default {
 .tabela-scroll {
   width: 100%;
   padding: 10px 0;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 }
 
 .tabela-scroll::-webkit-scrollbar {
@@ -226,12 +257,6 @@ export default {
   padding: 12px;
   border-bottom: 3px solid var(--background-cinza);
 }
-
-select {
-  cursor: pointer;
-  padding: 12px 6px;
-}
-
 .btn-produto {
   cursor: pointer;
   width: 100%;
@@ -243,11 +268,9 @@ select {
   font-weight: bold;
 }
 
-/* .notificacao-container {} */
-
 input {
   width: 100%;
-  border: 2px solid #1f1d2b36;
+  border: 1px solid var(--background-cinza);
   padding: 12px 16px;
 }
 
@@ -255,12 +278,7 @@ input {
   max-width: 300px;
 }
 
-.tabela-row select {
-  max-width: 200px;
-}
-
-#tipo.invalid,
-#categorias.invalid {
+#tipo.invalid {
   border: 2px solid red;
 }
 </style>

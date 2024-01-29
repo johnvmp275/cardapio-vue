@@ -14,27 +14,38 @@ import Button from './widgets/Button.vue';
         <!-- Cadastrar o nome do Cliente -->
         <div class="cliente-container">
           <label for="nome">Nome do Cliente:</label>
-          <input type="text" name="nome" id="nome" v-model="nome" :class="{ 'invalid': Nomeinvalido }"
-            placeholder="Nome do Cliente" required />
+          <input 
+              type="text" 
+              name="nome" 
+              id="nome" 
+              v-model="nome" 
+              :class="{ 'invalid': Nomeinvalido }"
+              placeholder="Nome do Cliente" 
+              required 
+          />
         </div>
         <!-- Cadastrar qual item escolhido do cardápio -->
         <div class="cardapio-container">
           <label for="comida">Cardápio:</label>
+
           <select name="comida" id="comida" v-model="comida" required :class="{ 'invalid': Comidainvalida }">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
             <option v-for="comida in comidas" :key="comida.id" :value="comida.tipo">
               {{ comida.tipo }}
             </option>
           </select>
+          
         </div>
         <div class="cardapio-container">
           <label for="acompanhamento">Acompanhamentos:</label>
+
           <select name="select-menu" id="acompanhamento" v-model="acompanhamento">
             <option value="null" selected style="display: none">Selecione o Pedido</option>
             <option v-for="acompanhamento in acompanhamentos" :key="acompanhamento.id" :value="acompanhamento.tipo">
               {{ acompanhamento.tipo }}
             </option>
           </select>
+
         </div>
         <!-- Cadastrar alterações ou implementações ao pedido -->
         <div class="complementos-container">
