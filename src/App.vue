@@ -5,7 +5,7 @@ import Login from './views/LoginView.vue'
 </script>
 
 <template>
-
+<!-- teste -->
   <Navbar 
   v-if="!isLogged" 
   :isLogged="isLogged" 
